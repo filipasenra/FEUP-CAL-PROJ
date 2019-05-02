@@ -1,4 +1,7 @@
-﻿#ifndef _GRAPH_VIEWER_H_
+﻿
+
+
+#ifndef _GRAPH_VIEWER_H_
 #define _GRAPH_VIEWER_H_
 
 #ifdef linux

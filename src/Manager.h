@@ -11,8 +11,24 @@ private:
 	Graph<Info_calender> journey;
 
 public:
-	Manager(){
+	//Name is the name of the file that contains
+	//the information about the netWork
+	Manager(string name){
+		//this->loadNetwork(name)
 	};
+
+	int loadNetWork(string name);
+
+	int addSpot();
+
+	Graph<Info_calender> getJourney()
+	{
+		return journey;
+	};
+
+	Graph<Spot> getNetWork(){
+		return network;
+	}
 
 };
 

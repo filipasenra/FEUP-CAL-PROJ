@@ -15,6 +15,10 @@ public:
 		calender.push_back(end);
 	}
 
+	std::vector<Info_calender> getCalender(){
+		return calender;
+	}
+
 };
 
 #endif

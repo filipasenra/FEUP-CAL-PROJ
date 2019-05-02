@@ -1,12 +1,13 @@
 #ifndef _SPOT_
 #define _SPOT_
 
+#include <string>
 
 class Spot{
 private:
 	int coordinates_y;
 	int coordinates_x;
-	string name;
+	std::string name;
 
 public:
 	Spot(int coordinates_y, int coordinates_x, string name){
@@ -23,7 +24,7 @@ public:
 		return coordinates_y;
 	}
 
-	string getName(){
+	std::string getName(){
 		return name;
 	}
 };

@@ -21,8 +21,6 @@ int main() {
 	for (int i = 0; i < 6; i++) {
 		spots.push_back(Spot(100*i + 1, 100*i + 1, 100*i + 1, Type::FOOT));
 		myGraph.addVertex(spots[i]);
-
-		cout << "id: " << spots[i].getId() << " x: " << spots[i].getCoordinates_x() << " y: " << spots[i].getCoordinates_y() << endl;
 	}
 
 	myGraph.addEdge(spots[1], spots[2], 2);
@@ -32,6 +30,7 @@ int main() {
 
 	drawGraph(myGraph);
 
+	//to stop the window from closing
 	getchar();
 
 	return 0;

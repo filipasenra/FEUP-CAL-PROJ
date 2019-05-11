@@ -10,7 +10,7 @@
 #include <algorithm>
 #include <unordered_set>
 #include "MutablePriorityQueue.h"
-#include "Type.h"
+#include <iostream>
 
 using namespace std;
 
@@ -41,6 +41,7 @@ public:
 	T getInfo() const;
 	double getDist() const;
 	Vertex *getPath() const;
+	vector<Edge<T>> getEdjes() const;
 	friend class Graph<T>;
 	friend class MutablePriorityQueue<Vertex<T>>;
 };
@@ -78,6 +79,11 @@ Vertex<T> *Vertex<T>::getPath() const {
 	return this->path;
 }
 
+template <class T>
+vector<Edge<T>> Vertex<T>::getEdjes() const {
+	return this->adj;
+}
+
 /********************** Edge  ****************************/
 
 template <class T>
@@ -87,8 +93,6 @@ class Edge {
 	bool selected; // Fp07
 
 	double weight;         // edge weight
-
-	Type transportation;
 
 
 
@@ -100,6 +104,8 @@ public:
 
 	// Fp07
 	double getWeight() const;
+	Vertex<T> * getOrig() const;
+	Vertex<T> * getDest() const;
 
 };
 
@@ -109,6 +115,17 @@ Edge<T>::Edge(Vertex<T> *o, Vertex<T> *d, double w): orig(o), dest(d), weight(w)
 template <class T>
 double Edge<T>::getWeight() const {
 	return weight;
+}
+
+
+template <class T>
+Vertex<T> * Edge<T>::getOrig() const{
+	return orig;
+}
+
+template <class T>
+Vertex<T> * Edge<T>::getDest() const{
+	return dest;
 }
 
 

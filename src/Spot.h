@@ -12,7 +12,7 @@ private:
 	Type type;
 
 public:
-	Spot(int coordinates_y, int coordinates_x, int id) {
+	Spot(int id, int coordinates_y, int coordinates_x) {
 		this->coordinates_x = coordinates_x;
 		this->coordinates_y = coordinates_y;
 		this->id = id;

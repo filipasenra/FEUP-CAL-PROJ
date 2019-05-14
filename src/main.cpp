@@ -29,12 +29,14 @@ int main() {
 	myGraph.addEdge(spots[2], spots[4], 3);
 	myGraph.addEdge(spots[2], spots[5], 5);
 
-	drawGraph(myGraph);
+	//drawGraph(myGraph, 600, 600);
 
-	Graph<Spot> graph = parseMap("hello.txt", "hello1.txt");
+
+	Graph<Spot> graph = parseMap("T11_nodes_X_Y_Aveiro.txt", "T11_edges_Aveiro.txt");
+
 
 	//before drawing we have to normalize the coordenates
-	//drawGraph(graph);
+	drawGraph(graph, 1500, 1000);
 
 	//to stop the window from closing
 	getchar();

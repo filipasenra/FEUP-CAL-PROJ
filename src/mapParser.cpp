@@ -59,7 +59,7 @@ void parseEdgesFile(Graph<Spot> * graph, std::string edgesFile) {
 	while (std::getline(file_edges, line) && number_of_nodes != 0) {
 		number_of_nodes--;
 
-		int id1, id2;
+		int id1 = 0, id2 = 0;
 
 		sscanf(line.c_str(), "(%d, %d)", &id1, &id2);
 
@@ -75,6 +75,8 @@ Graph<Spot> parseMap(std::string X_YFile, std::string edgesFile/*,
 	Graph<Spot> graph;
 
 	parseX_YFile(&graph, X_YFile);
+
+	parseEdgesFile(&graph, edgesFile);
 
 
 

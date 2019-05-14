@@ -5,7 +5,7 @@
 #include "Spot.h"
 #include "graphviewer.h"
 
-int drawGraph(Graph<Spot> graph);
+int drawGraph(Graph<Spot> graph, int width, int height);
 
 
 

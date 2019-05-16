@@ -64,6 +64,9 @@ int drawGraph(Graph<Spot> graph, int width, int height) {
 			gv->addEdge(n_edge, outgoingEdges[j].getOrig()->getInfo().getId(),
 					outgoingEdges[j].getDest()->getInfo().getId(),
 					EdgeType::DIRECTED);
+
+
+			gv->setEdgeLabel(n_edge, to_string(outgoingEdges[j].getWeight()));
 			n_edge++;
 		}
 	}

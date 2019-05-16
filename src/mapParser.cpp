@@ -4,6 +4,7 @@
 #include <sstream>
 #include <iomanip>
 #include "Spot.h"
+#include <math.h>
 
 void parseX_YFile(Graph<Spot> * graph, std::string X_YFile) {
 
@@ -63,7 +64,19 @@ void parseEdgesFile(Graph<Spot> * graph, std::string edgesFile) {
 
 		sscanf(line.c_str(), "(%d, %d)", &id1, &id2);
 
-		graph->addEdge(Spot(id1), Spot(id2), 1);
+		double weight;
+		Spot spot = Spot(id1);
+		Spot spot2= Spot(id2);
+		Vertex<Spot> * a = graph->findVertex(spot);
+		Vertex<Spot> * b= graph->findVertex(spot2);
+
+		if( a == NULL || b == NULL)
+			continue;
+
+		weight = sqrt(pow(a->getInfo().getCoordinates_x() - b->getInfo().getCoordinates_x() , 2)
+				+ pow(a->getInfo().getCoordinates_y() - b->getInfo().getCoordinates_y() , 2) );
+
+		graph->addEdge(Spot(id1), Spot(id2), weight);
 
 	}
 

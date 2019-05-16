@@ -149,6 +149,7 @@ public:
 	bool addEdge(const T &sourc, const T &dest, double w);
 	int getNumVertex() const;
 	vector<Vertex<T> *> getVertexSet() const;
+	Graph<T>getPathGraph(const T &origin, const T &dest) const;
 
 	// Fp05 - single source
 	void dijkstraShortestPath(const T &s);
@@ -269,6 +270,7 @@ inline bool Graph<T>::relax(Vertex<T> *v, Vertex<T> *w, double weight) {
 
 template<class T>
 void Graph<T>::dijkstraShortestPath(const T &origin) {
+
 	auto s = initSingleSource(origin);
 	MutablePriorityQueue<Vertex<T>> q;
 	q.insert(s);
@@ -296,6 +298,35 @@ vector<T> Graph<T>::getPath(const T &origin, const T &dest) const{
 		res.push_back(v->info);
 	reverse(res.begin(), res.end());
 	return res;
+}
+
+template<class T>
+Graph<T> Graph<T>::getPathGraph(const T &origin, const T &dest) const{
+
+	Graph<T> graph;
+
+	vector<T> res;
+	auto v = findVertex(dest);
+
+	if (v == nullptr || v->dist == INF) // missing or disconnected
+		return graph;
+
+	Vertex<T> * old = nullptr;
+
+	for ( ; v != nullptr; v = v->path)
+		{
+			graph.addVertex(v->getInfo());
+
+			if(old != nullptr)
+				{
+				 graph.addEdge(old->getInfo(), v->getInfo(), old->dist);
+				}
+
+			old = v;
+		}
+
+	//reverse(res.begin(), res.end());
+	return graph;
 }
 
 template<class T>

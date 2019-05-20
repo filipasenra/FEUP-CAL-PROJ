@@ -88,7 +88,7 @@ void parseEdgesFile(Graph<Spot> * graph, std::string edgesFile) {
 	std::istringstream iss(line);
 	iss >> number_of_nodes;
 
-int n_edge = 0;
+	int n_edge = 0;
 
 	while (std::getline(file_edges, line) && number_of_nodes != 0) {
 		number_of_nodes--;

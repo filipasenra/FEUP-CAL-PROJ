@@ -5,38 +5,16 @@
 #include <sstream>
 #include <windows.h>
 
-#include "Graph.h"
-#include "Spot.h"
-#include "Draw.h"
-#include "mapParser.h"
+#include "menu.h"
 
 int main() {
 
 
-	//Testing draw function (no bugs found)
-
-	Graph<Spot> myGraph;
-
-	vector<Spot> spots;
-
-	for (int i = 0; i < 6; i++) {
-		spots.push_back(Spot(100*i + 1, 100*i + 1, 100*i + 1));
-		myGraph.addVertex(spots[i]);
-	}
-
-	myGraph.addEdge(spots[1], spots[2], 2);
-	myGraph.addEdge(spots[1], spots[4], 7);
-	myGraph.addEdge(spots[2], spots[4], 3);
-	myGraph.addEdge(spots[2], spots[5], 5);
-
-	//drawGraph(myGraph, 600, 600);
-
-
-	Graph<Spot> graph = parseMap("T11_nodes_X_Y_Porto.txt", "T11_edges_Porto.txt", "T11_nodes_lat_lon_Porto.txt");
+	//Graph<Spot> graph = parseMap("T11_nodes_X_Y_Porto.txt", "T11_edges_Porto.txt", "T11_nodes_lat_lon_Porto.txt");
 
 
 	//before drawing we have to normalize the coordenates
-	drawGraph(graph, 1500, 1000);
+	//drawGraph(graph, 1500, 1000);
 
 	//graph.dijkstraShortestPath(Spot(26018641), Spot(26018648));
 
@@ -46,7 +24,13 @@ int main() {
 
 
 	//to stop the window from closing
-	getchar();
+	//getchar();
+
+
+	menu m;
+	while (!m.terminate){
+		m.initial();
+	}
 
 	return 0;
 }

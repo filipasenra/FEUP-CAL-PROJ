@@ -35,7 +35,7 @@ int drawGraph(Graph<Spot> graph, int width, int height) {
 						EdgeType::DIRECTED);
 
 
-				gv->setEdgeLabel(n_edge, to_string(outgoingEdges[j].getWeight()));
+				//gv->setEdgeLabel(n_edge, to_string(outgoingEdges[j].getWeight()));
 				n_edge++;
 			}
 		}

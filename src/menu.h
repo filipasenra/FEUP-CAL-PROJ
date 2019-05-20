@@ -23,11 +23,13 @@
 class menu {
 private:
 	Graph<Spot> graph;
+	Graph<Spot> graphPath;
 
 public:
 	bool terminate = false;
 	menu();
 	void initial();
+	void findPath();
 
 };
 

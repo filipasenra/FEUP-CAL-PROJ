@@ -15,18 +15,19 @@
 
 using namespace std;
 menu::menu() {
+	this->graph = parseMap("T11_nodes_X_Y_Aveiro.txt", "T11_edges_Aveiro.txt", "T11_nodes_lat_lon_Aveiro.txt");
 }
 
 void menu::initial(){
 	// TODO Auto-generated constructor stub
 	clearScreen();
-	this->graph = parseMap("T11_nodes_X_Y_Porto.txt", "T11_edges_Porto.txt", "T11_nodes_lat_lon_Porto.txt");
 	cout << endl;  //adicionar opcoes aqui
 	cout << "+-----------------------------------------------------------------------+" << endl;
 	cout << "|                         Initial Options Menu                          |" << endl;
 	cout << "|                                                                       |" << endl;
 	cout << "|      1 - Show map                                                     |" << endl;
-	cout << "|      2 - Exit                                                         |" << endl;
+	cout << "|      2 - find path                                                    |" << endl;
+	cout << "|      3 - Exit                                                         |" << endl;
 	cout << "|                                                                       |" << endl;
 	cout << "+-----------------------------------------------------------------------+" << endl;
 
@@ -40,9 +41,29 @@ void menu::initial(){
 		getchar();
 		break;
 	case 2:
-		this->terminate = false;
+		findPath();
+		return;
+	case 3:
+		this->terminate = true;
 		return;
 	}
 
 }
+
+
+void menu::findPath(){
+	int destino, origem;
+	cout << "where are you?(node id)  " << endl;
+	cin >> origem;
+	cout << "where do you want to go?(node id)   " << endl;
+	cin >> destino;
+	this->graph.dijkstraShortestPath(Spot(origem), Spot(destino));
+	this->graphPath =graph.getPathGraph(origem, destino);
+	drawGraph(graphPath, 1500, 1000);
+	getchar();
+}
+
+
+
+
 

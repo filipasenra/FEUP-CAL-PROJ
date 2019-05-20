@@ -38,7 +38,7 @@ int main() {
 	//before drawing we have to normalize the coordenates
 	//drawGraph(graph, 1500, 1000);
 
-	graph.dijkstraShortestPath(Spot(26018641));
+	graph.dijkstraShortestPath(Spot(26018641), Spot(26018648));
 
 	Graph<Spot> graph2 = graph.getPathGraph(26018641, 26018648);
 

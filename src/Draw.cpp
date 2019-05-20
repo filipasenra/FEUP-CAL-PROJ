@@ -12,7 +12,7 @@ void getDesvio(vector<Vertex<Spot> *> vec, double &max_x, double &max_y, double 
 	max_x = 0, max_y = 0;
 	min_x = 100000000000, min_y = 100000000000;
 
-	for (int i = 0; i < vec.size(); i++) {
+	for (unsigned int i = 0; i < vec.size(); i++) {
 		double coordinates_x = vec.at(i)->getInfo().getCoordinates_x();
 		double coordinates_y = vec.at(i)->getInfo().getCoordinates_y();
 
@@ -49,7 +49,7 @@ int drawGraph(Graph<Spot> graph, int width, int height) {
 	double desvio_x = (double) width / (max_x - min_x);
 	double desvio_y = (double) height / (max_y - min_y);
 
-	for (int i = 0; i < vec.size(); i++) {
+	for (unsigned int i = 0; i < vec.size(); i++) {
 		Spot info = vec[i]->getInfo();
 
 		gv->addNode(info.getId(),
@@ -59,7 +59,7 @@ int drawGraph(Graph<Spot> graph, int width, int height) {
 
 		vector<Edge<Spot> > outgoingEdges = vec[i]->getEdjes();
 
-		for (int j = 0; j < outgoingEdges.size(); j++) {
+		for (unsigned int j = 0; j < outgoingEdges.size(); j++) {
 
 			gv->addEdge(n_edge, outgoingEdges[j].getOrig()->getInfo().getId(),
 					outgoingEdges[j].getDest()->getInfo().getId(),
@@ -70,5 +70,7 @@ int drawGraph(Graph<Spot> graph, int width, int height) {
 			n_edge++;
 		}
 	}
+
+	return 0;
 
 }

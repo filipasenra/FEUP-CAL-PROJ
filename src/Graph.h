@@ -134,6 +134,7 @@ Vertex<T> * Edge<T>::getDest() const{
 template <class T>
 class Graph {
 	vector<Vertex<T> *> vertexSet;    // vertex set
+	bool nodesReset = true;
 
 	// Fp05
 	Vertex<T> * initSingleSource(const T &orig);
@@ -152,7 +153,7 @@ public:
 	Graph<T>getPathGraph(const T &origin, const T &dest) const;
 
 	// Fp05 - single source
-	void dijkstraShortestPath(const T &s);
+	void dijkstraShortestPath(const T &s, const T &d);
 	void unweightedShortestPath(const T &s);
 	void bellmanFordShortestPath(const T &s);
 	vector<T> getPath(const T &origin, const T &dest) const;
@@ -165,6 +166,8 @@ public:
 	// Fp07 - minimum spanning tree
 	vector<Vertex<T>*> calculatePrim();
 	vector<Vertex<T>*> calculateKruskal();
+
+	void ResetNodes();
 };
 
 template<class T>
@@ -267,17 +270,48 @@ inline bool Graph<T>::relax(Vertex<T> *v, Vertex<T> *w, double weight) {
 		return false;
 }
 
+/**
+ * Resets the nodes
+ */
+template<class T>
+void Graph<T>::ResetNodes() {
+
+	if(this->nodesReset)
+		return;
+
+	for(int i = 0; i < this->vertexSet.size(); i++)
+	{
+		vertexSet.at(i)->visited = false;
+		vertexSet.at(i)->path = nullptr;
+		vertexSet.at(i)->disjSet.clear();
+		vertexSet.at(i)->dist = INF;
+		vertexSet.at(i)->queueIndex = 0;
+
+	}
+
+	this->nodesReset = true;
+}
+
 
 template<class T>
-void Graph<T>::dijkstraShortestPath(const T &origin) {
+void Graph<T>::dijkstraShortestPath(const T &origin, const T &end) {
+
+	this->ResetNodes();
 
 	auto s = initSingleSource(origin);
 	MutablePriorityQueue<Vertex<T>> q;
 	q.insert(s);
+
 	while( ! q.empty() ) {
 		auto v = q.extractMin();
+
+		//Has it arrived at the end of the path?
+		if(v->info == end)
+			return;
+
 		for(auto e : v->adj) {
 			auto oldDist = e.dest->dist;
+
 			if (relax(v, e.dest, e.weight)) {
 				if (oldDist == INF)
 					q.insert(e.dest);
@@ -285,7 +319,10 @@ void Graph<T>::dijkstraShortestPath(const T &origin) {
 					q.decreaseKey(e.dest);
 			}
 		}
+
 	}
+
+	this->nodesReset = false;
 }
 
 template<class T>

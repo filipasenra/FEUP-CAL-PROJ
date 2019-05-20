@@ -56,20 +56,24 @@ int drawGraph(Graph<Spot> graph, int width, int height) {
 				normalizingCoordenate(info.getCoordinates_x(), desvio_x, min_x),
 				normalizingCoordenate(info.getCoordinates_y(), desvio_y,
 						min_y));
-
-		vector<Edge<Spot> > outgoingEdges = vec[i]->getEdjes();
-
-		for (unsigned int j = 0; j < outgoingEdges.size(); j++) {
-
-			gv->addEdge(n_edge, outgoingEdges[j].getOrig()->getInfo().getId(),
-					outgoingEdges[j].getDest()->getInfo().getId(),
-					EdgeType::DIRECTED);
-
-
-			gv->setEdgeLabel(n_edge, to_string(outgoingEdges[j].getWeight()));
-			n_edge++;
-		}
 	}
+
+	for (unsigned int i = 0; i < vec.size(); i++) {
+			Spot info = vec[i]->getInfo();
+
+			vector<Edge<Spot> > outgoingEdges = vec[i]->getEdjes();
+
+			for (unsigned int j = 0; j < outgoingEdges.size(); j++) {
+
+				gv->addEdge(n_edge, outgoingEdges[j].getOrig()->getInfo().getId(),
+						outgoingEdges[j].getDest()->getInfo().getId(),
+						EdgeType::DIRECTED);
+
+
+				gv->setEdgeLabel(n_edge, to_string(outgoingEdges[j].getWeight()));
+				n_edge++;
+			}
+		}
 
 	return 0;
 

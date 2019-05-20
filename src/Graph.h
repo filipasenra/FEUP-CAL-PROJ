@@ -279,7 +279,7 @@ void Graph<T>::ResetNodes() {
 	if(this->nodesReset)
 		return;
 
-	for(int i = 0; i < this->vertexSet.size(); i++)
+	for(unsigned int i = 0; i < this->vertexSet.size(); i++)
 	{
 		vertexSet.at(i)->visited = false;
 		vertexSet.at(i)->path = nullptr;

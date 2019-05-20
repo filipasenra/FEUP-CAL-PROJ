@@ -8,13 +8,17 @@ class Spot {
 private:
 	int coordinates_y;
 	int coordinates_x;
+	int latitude;
+	int longitude;
 	int id;
 	Type type;
 
 public:
-	Spot(int id, int coordinates_y, int coordinates_x) {
+	Spot(int id, int coordinates_y, int coordinates_x, int lati = 0, int longi = 0) {
 		this->coordinates_x = coordinates_x;
 		this->coordinates_y = coordinates_y;
+		this->latitude = lati;
+		this->longitude = longi;
 		this->id = id;
 		this->type = Type::FOOT;
 	}
@@ -23,6 +27,8 @@ public:
 		this->id = id;
 		this->coordinates_x = 0;
 		this->coordinates_y = 0;
+		this->latitude = 0;
+		this->longitude = 0;
 		this->id = id;
 		this->type = Type::FOOT;
 	}

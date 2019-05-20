@@ -2,34 +2,6 @@
 
 #include "edgetype.h"
 
-double normalizingCoordenate(double inicial, double desvio, double min) {
-
-	return (inicial - min) * desvio;
-}
-
-void getDesvio(vector<Vertex<Spot> *> vec, double &max_x, double &max_y, double &min_x, double &min_y) {
-
-	max_x = 0, max_y = 0;
-	min_x = 100000000000, min_y = 100000000000;
-
-	for (unsigned int i = 0; i < vec.size(); i++) {
-		double coordinates_x = vec.at(i)->getInfo().getCoordinates_x();
-		double coordinates_y = vec.at(i)->getInfo().getCoordinates_y();
-
-		if (coordinates_x > max_x)
-			max_x = coordinates_x;
-
-		if (coordinates_x < min_x)
-			min_x = coordinates_x;
-
-		if (coordinates_y > max_y)
-			max_y = coordinates_y;
-
-		if (coordinates_y < min_y)
-			min_y = coordinates_y;
-	}
-}
-
 int drawGraph(Graph<Spot> graph, int width, int height) {
 
 	//Displaying of the graph
@@ -49,13 +21,13 @@ int drawGraph(Graph<Spot> graph, int width, int height) {
 	double desvio_x = (double) width / (max_x - min_x);
 	double desvio_y = (double) height / (max_y - min_y);
 
+	Spot first = vec[0]->getInfo();
 	for (unsigned int i = 0; i < vec.size(); i++) {
 		Spot info = vec[i]->getInfo();
 
 		gv->addNode(info.getId(),
-				normalizingCoordenate(info.getCoordinates_x(), desvio_x, min_x),
-				normalizingCoordenate(info.getCoordinates_y(), desvio_y,
-						min_y));
+				info.getCoordinates_x()-first.getCoordinates_x(),
+				info.getCoordinates_y()-first.getCoordinates_y());
 	}
 
 	for (unsigned int i = 0; i < vec.size(); i++) {

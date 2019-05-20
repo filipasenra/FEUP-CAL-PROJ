@@ -32,7 +32,7 @@ int main() {
 	//drawGraph(myGraph, 600, 600);
 
 
-	Graph<Spot> graph = parseMap("T11_nodes_X_Y_Porto.txt", "T11_edges_Porto.txt");
+	Graph<Spot> graph = parseMap("T11_nodes_X_Y_Porto.txt", "T11_edges_Porto.txt", "T11_nodes_lat_lon_Porto.txt");
 
 
 	//before drawing we have to normalize the coordenates

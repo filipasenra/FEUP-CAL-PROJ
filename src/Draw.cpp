@@ -13,13 +13,6 @@ int drawGraph(Graph<Spot> graph, int width, int height) {
 
 	vector<Vertex<Spot> *> vec = graph.getVertexSet();
 	int n_edge = 0;
-	double min_x = 0, min_y = 0, max_x = 0, max_y = 0;
-
-	getDesvio(vec, max_x, max_y, min_x, min_y);
-
-	//novas/velhas + desvio da origem atual da antiga
-	double desvio_x = (double) width / (max_x - min_x);
-	double desvio_y = (double) height / (max_y - min_y);
 
 	Spot first = vec[0]->getInfo();
 	for (unsigned int i = 0; i < vec.size(); i++) {

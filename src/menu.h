@@ -24,13 +24,14 @@
 class menu {
 private:
 	Graph<Spot> graph;
-	vector<Info_calender> schedule;
+	vector<Info_calendar> schedule;
 
 public:
 	bool terminate = false;
 	menu();
 	void initial();
 	void addElementSchedule();
+	void showMapSchedule();
 
 };
 

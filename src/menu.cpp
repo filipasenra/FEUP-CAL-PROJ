@@ -14,12 +14,13 @@ using namespace std;
 menu::menu() {
 
 	// TODO Auto-generated constructor stub
-	clearScreen();
 	this->graph = parseMap("T11_nodes_X_Y_Porto.txt", "T11_edges_Porto.txt",
 			"T11_nodes_lat_lon_Porto.txt");
 }
 
 void menu::initial() {
+	clearScreen();
+
 	cout << endl;  //adicionar opcoes aqui
 	cout
 			<< "+-----------------------------------------------------------------------+"
@@ -37,7 +38,10 @@ void menu::initial() {
 			<< "|      2 - Add element to schedule                                      |"
 			<< endl;
 	cout
-			<< "|      3 - Exit                                                         |"
+			<< "|      3 - Show schedule map                                            |"
+			<< endl;
+	cout
+			<< "|      4 - Exit                                                         |"
 			<< endl;
 	cout
 			<< "|                                                                       |"
@@ -59,6 +63,9 @@ void menu::initial() {
 		this->addElementSchedule();
 		break;
 	case 3:
+		this->showMapSchedule();
+		break;
+	case 4:
 		this->terminate = true;
 		return;
 	}
@@ -70,7 +77,7 @@ void menu::addElementSchedule() {
 	cin.clear();
 	cin.ignore(10000, '\n');
 
-	int coordinates_x, coordinates_y;
+	double coordinates_x, coordinates_y;
 
 	cout << "Longitude: ";
 	while (!(cin >> coordinates_x)) {
@@ -95,8 +102,8 @@ void menu::addElementSchedule() {
 	for (int i = 0; i < vec.size(); i++) {
 		Coordinates latlong = vec.at(i)->getInfo().getLatiLong();
 
-		if (((int) latlong.getCoordinates_x()) == coordinates_x
-				&& ((int) latlong.getCoordinates_y()) == coordinates_y) {
+		if ((latlong.getCoordinates_x()) == coordinates_x
+				&& (latlong.getCoordinates_y()) == coordinates_y) {
 			spot = vec.at(i)->getInfo();
 			passed = true;
 			break;
@@ -129,9 +136,21 @@ void menu::addElementSchedule() {
 	cin.clear();
 	cin.ignore(10000, '\n');
 
-	Info_calender info_calender(spot, start, duration);
+	Info_calendar info_calendar(spot, start, duration);
 
-	this->schedule.push_back(info_calender);
+	this->schedule.push_back(info_calendar);
+
+}
+
+
+void menu::showMapSchedule(){
+
+	for(int i = 1; i < this->schedule.size(); i++ ){
+
+		graph.dijkstraShortestPath(schedule.at(i-1).getSpot(), schedule.at(i).getSpot());
+		Graph<Spot> graph2 = graph.getPathGraph(schedule.at(i-1).getSpot(), schedule.at(i).getSpot());
+		drawGraph(graph2, 1500, 1000);
+	}
 
 }
 

@@ -31,8 +31,9 @@ public:
 	bool terminate = false;
 	menu();
 	void initial();
-	void findPath();
 	void addElementSchedule();
+	void addingGraph(Graph<Spot> * source, Graph<Spot> * to_be_added);
+	void makePath();
 	void showMapSchedule();
 
 };

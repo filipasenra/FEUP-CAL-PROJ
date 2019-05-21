@@ -10,6 +10,7 @@
 
 #include "Graph.h"
 #include "Spot.h"
+#include "Info_calender.h"
 
 
 
@@ -23,11 +24,13 @@
 class menu {
 private:
 	Graph<Spot> graph;
+	vector<Info_calender> schedule;
 
 public:
 	bool terminate = false;
 	menu();
 	void initial();
+	void addElementSchedule();
 
 };
 

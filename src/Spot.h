@@ -39,6 +39,8 @@ public:
 
 	PublicTransp publicTransp;
 
+	Spot(){};
+
 	Spot(int id, int coordinates_x, int coordinates_y, int lati = 0, int longi =
 			0) {
 		this->x_y = Coordinates(coordinates_x, coordinates_y);
@@ -76,6 +78,10 @@ public:
 
 	bool hasSubwayStop() {
 		return (publicTransp.subway.size() != 0);
+	}
+
+	Coordinates getLatiLong(){
+		return lat_long;
 	}
 };
 

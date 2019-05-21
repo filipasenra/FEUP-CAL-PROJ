@@ -5,44 +5,133 @@
  *      Author: david
  */
 
-
-
 #include "menu.h"
 #include <iostream>
 #include "mapParser.h"
 #include "Draw.h"
 
-
 using namespace std;
 menu::menu() {
-}
 
-void menu::initial(){
 	// TODO Auto-generated constructor stub
 	clearScreen();
-	this->graph = parseMap("T11_nodes_X_Y_Porto.txt", "T11_edges_Porto.txt", "T11_nodes_lat_lon_Porto.txt");
+	this->graph = parseMap("T11_nodes_X_Y_Porto.txt", "T11_edges_Porto.txt",
+			"T11_nodes_lat_lon_Porto.txt");
+}
+
+void menu::initial() {
 	cout << endl;  //adicionar opcoes aqui
-	cout << "+-----------------------------------------------------------------------+" << endl;
-	cout << "|                         Initial Options Menu                          |" << endl;
-	cout << "|                                                                       |" << endl;
-	cout << "|      1 - Show map                                                     |" << endl;
-	cout << "|      2 - Exit                                                         |" << endl;
-	cout << "|                                                                       |" << endl;
-	cout << "+-----------------------------------------------------------------------+" << endl;
+	cout
+			<< "+-----------------------------------------------------------------------+"
+			<< endl;
+	cout
+			<< "|                         Initial Options Menu                          |"
+			<< endl;
+	cout
+			<< "|                                                                       |"
+			<< endl;
+	cout
+			<< "|      1 - Show map                                                     |"
+			<< endl;
+	cout
+			<< "|      2 - Add element to schedule                                      |"
+			<< endl;
+	cout
+			<< "|      3 - Exit                                                         |"
+			<< endl;
+	cout
+			<< "|                                                                       |"
+			<< endl;
+	cout
+			<< "+-----------------------------------------------------------------------+"
+			<< endl;
 
 	int opcao;
 
 	cout << "Your option: ";
 	cin >> opcao;
-	switch(opcao){
+	switch (opcao) {
 	case 1:
 		drawGraph(graph, 1500, 1000);
 		getchar();
 		break;
 	case 2:
-		this->terminate = false;
+		this->addElementSchedule();
+		break;
+	case 3:
+		this->terminate = true;
 		return;
 	}
+
+}
+
+void menu::addElementSchedule() {
+
+	cin.clear();
+	cin.ignore(10000, '\n');
+
+	int coordinates_x, coordinates_y;
+
+	cout << "Longitude: ";
+	while (!(cin >> coordinates_x)) {
+		cin.clear();
+		cin.ignore(10000, '\n');
+
+		cout << "Longitude: ";
+	}
+
+	cout << "Latitude: ";
+	while (!(cin >> coordinates_y)) {
+		cin.clear();
+		cin.ignore(10000, '\n');
+
+		cout << "Latitude: ";
+	}
+
+	vector<Vertex<Spot> *> vec = graph.getVertexSet();
+	Spot spot;
+	bool passed;
+
+	for (int i = 0; i < vec.size(); i++) {
+		Coordinates latlong = vec.at(i)->getInfo().getLatiLong();
+
+		if (((int) latlong.getCoordinates_x()) == coordinates_x
+				&& ((int) latlong.getCoordinates_y()) == coordinates_y) {
+			spot = vec.at(i)->getInfo();
+			passed = true;
+			break;
+		}
+	}
+
+	if (!passed) {
+		cout << "Spot was not found!\n";
+		return;
+	}
+
+	int start, duration;
+
+	cout << "Start: ";
+	while (!(cin >> start)) {
+		cin.clear();
+		cin.ignore(10000, '\n');
+
+		cout << "Start: ";
+	}
+
+	cout << "Duration: ";
+	while (!(cin >> duration)) {
+		cin.clear();
+		cin.ignore(10000, '\n');
+
+		cout << "Duration: ";
+	}
+
+	cin.clear();
+	cin.ignore(10000, '\n');
+
+	Info_calender info_calender(spot, start, duration);
+
+	this->schedule.push_back(info_calender);
 
 }
 

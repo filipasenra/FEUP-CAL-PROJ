@@ -7,22 +7,22 @@
 class Coordinates {
 private:
 
-	int coordinates_x;
-	int coordinates_y;
+	double coordinates_x;
+	double coordinates_y;
 
 public:
 
-	Coordinates(int x, int y) :
+	Coordinates(double x, double y) :
 			coordinates_x(x), coordinates_y(y) {};
 
 	Coordinates() :
 				coordinates_x(0), coordinates_y(0) {};
 
-	int getCoordinates_x() {
+	double getCoordinates_x() {
 		return coordinates_x;
 	}
 
-	int getCoordinates_y() {
+	double getCoordinates_y() {
 		return coordinates_y;
 	}
 };
@@ -39,7 +39,9 @@ public:
 
 	PublicTransp publicTransp;
 
-	Spot(int id, int coordinates_x, int coordinates_y, int lati = 0, int longi =
+	Spot(){};
+
+	Spot(int id, double coordinates_x, double coordinates_y, double lati = 0, double longi =
 			0) {
 		this->x_y = Coordinates(coordinates_x, coordinates_y);
 		this->lat_long = Coordinates(lati, longi);
@@ -58,11 +60,11 @@ public:
 	}
 
 
-	int getCoordinates_x() {
+	double getCoordinates_x() {
 		return this->x_y.getCoordinates_x();
 	}
 
-	int getCoordinates_y() {
+	double getCoordinates_y() {
 		return this->x_y.getCoordinates_y();
 	}
 
@@ -76,6 +78,10 @@ public:
 
 	bool hasSubwayStop() {
 		return (publicTransp.subway.size() != 0);
+	}
+
+	Coordinates getLatiLong(){
+		return lat_long;
 	}
 };
 

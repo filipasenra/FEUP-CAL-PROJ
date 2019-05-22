@@ -11,6 +11,7 @@
 #include "Graph.h"
 #include "Spot.h"
 #include "Info_calender.h"
+#include "BiDirectionalDijkstra.h"
 
 
 
@@ -24,7 +25,6 @@
 class menu {
 private:
 	Graph<Spot> graph;
-	Graph<Spot> graphPath;
 	vector<Info_calendar> schedule;
 
 public:
@@ -32,7 +32,6 @@ public:
 	menu();
 	void initial();
 	void addElementSchedule();
-	void addingGraph(Graph<Spot> * source, Graph<Spot> * to_be_added);
 	void makePath();
 	void showMapSchedule();
 

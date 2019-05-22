@@ -12,25 +12,41 @@
 
 using namespace std;
 menu::menu() {
-	this->graph = parseMap("T11_nodes_X_Y_Aveiro.txt", "T11_edges_Aveiro.txt", "T11_nodes_lat_lon_Aveiro.txt");
-	this->graphPath;
+	this->graph = parseMap("T11_nodes_X_Y_Aveiro.txt", "T11_edges_Aveiro.txt",
+			"T11_nodes_lat_lon_Aveiro.txt");
 }
-
 
 void menu::initial() {
 	clearScreen();
 
 	cout << endl;  //adicionar opcoes aqui
 	cout
-			<< "+-----------------------------------------------------------------------+"<< endl;
-	cout	<< "|                         Initial Options Menu                          |"<< endl;
-	cout	<< "|                                                                       |"<< endl;
-	cout	<< "|      1 - Show map                                                     |"<< endl;
-	cout	<< "|      2 - Add element to schedule                                      |"<< endl;
-	cout	<< "|      3 - Show schedule map                                            |"<< endl;
-	cout	<< "|      4 - Exit                                                         |"<< endl;
-	cout	<< "|                                                                       |"<< endl;
-	cout	<< "+-----------------------------------------------------------------------+"<< endl;
+			<< "+-----------------------------------------------------------------------+"
+			<< endl;
+	cout
+			<< "|                         Initial Options Menu                          |"
+			<< endl;
+	cout
+			<< "|                                                                       |"
+			<< endl;
+	cout
+			<< "|      1 - Show map                                                     |"
+			<< endl;
+	cout
+			<< "|      2 - Add element to schedule                                      |"
+			<< endl;
+	cout
+			<< "|      3 - Show schedule map                                            |"
+			<< endl;
+	cout
+			<< "|      4 - Exit                                                         |"
+			<< endl;
+	cout
+			<< "|                                                                       |"
+			<< endl;
+	cout
+			<< "+-----------------------------------------------------------------------+"
+			<< endl;
 
 	int opcao;
 
@@ -115,8 +131,6 @@ void menu::addElementSchedule() {
 		cout << "minutes: ";
 	}
 
-
-
 	cout << "Duration: ";
 	while (!(cin >> duration)) {
 		cin.clear();
@@ -128,79 +142,33 @@ void menu::addElementSchedule() {
 	cin.clear();
 	cin.ignore(10000, '\n');
 
-	Info_calendar info_calendar(spot, hour,  minutes, duration);
+	Info_calendar info_calendar(spot, hour, minutes, duration);
 
-	if (schedule.size() == 0){
-		this->schedule.push_back(info_calendar);
-		return;
-	}
+	this->schedule.push_back(info_calendar);
 
-	for (size_t i = 0; i < schedule.size(); i++){
-		if (info_calendar.getStart() > schedule.at(i).getStart()){
-			this->schedule.insert(schedule.begin() + i, info_calendar);
-			return;
-		}
-	}
+	sort(schedule.begin(), schedule.end());
 }
 
+void menu::showMapSchedule() {
 
-void menu::addingGraph(Graph<Spot> * source, Graph<Spot> * to_be_added) {
+	Graph<Spot> graphPath;
 
-	vector<Vertex<Spot> *> vec = to_be_added->getVertexSet();
+	for (size_t i = 1; i < this->schedule.size(); i++) {
+		Graph<Spot> new_graph;
 
-	for (int i = 0; i < vec.size(); i++) {
+		graph.dijkstraShortestPath(schedule.at(i - 1).getSpot(),
+				schedule.at(i).getSpot());
 
-		Vertex<Spot> * invertedVertex = vec.at(i);
+		new_graph = graph.getPathGraph(schedule.at(i - 1).getSpot(),
+				schedule.at(i).getSpot());
 
-		source->addVertex(invertedVertex->getInfo());
+		addingGraph(&graphPath, &new_graph);
 	}
 
-	for (int i = 0; i < vec.size(); i++) {
-
-		Vertex<Spot> * vertex = vec.at(i);
-		vector<Edge<Spot>> edjes = vertex->getEdjes();
-
-		for (int j = 0; j < edjes.size(); j++) {
-			source->addEdge(vertex->getInfo(),
-					edjes.at(i).getDest()->getInfo(),
-					edjes.at(i).getWeight());
-			cout << vertex->getInfo().getId() << endl;
-		}
-	}
-
+	if (graphPath.getNumVertex() != 0) {
+		drawGraph(graphPath, 1500, 1000);
+		getchar();
+	} else
+		cout << "No path found!\n";
 }
-
-void menu::makePath(){
-	this->graphPath.ResetNodes();
-	for (size_t i = 1; i < schedule.size(); i++){
-		graph.dijkstraShortestPath(schedule.at(i-1).getSpot(), schedule.at(i).getSpot());
-		vector<Spot> path =graph.getPath(schedule.at(i-1).getSpot(), schedule.at(i).getSpot());
-		for(size_t k = 0; k < path.size(); k++){
-			graphPath.addVertex(path.at(k));
-		}
-	}
-}
-
-
-
-void menu::showMapSchedule(){
-
-/*	for(size_t i = 1; i < this->schedule.size(); i++ ){
-
-		graph.dijkstraShortestPath(schedule.at(i-1).getSpot(), schedule.at(i).getSpot());
-
-		graphPath = graph.getPathGraph(schedule.at(i-1).getSpot(), schedule.at(i).getSpot());
-	}
-
-
-*/
-
-	makePath();
-	drawGraph(graphPath, 1500, 1000);
-	getchar();
-}
-
-
-
-
 

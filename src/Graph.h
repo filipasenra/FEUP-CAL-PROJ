@@ -314,6 +314,7 @@ void Graph<T>::dijkstraShortestPath(const T &origin, const T &end) {
 	q.insert(s);
 
 	while (!q.empty()) {
+
 		auto v = q.extractMin();
 
 		//Has it arrived at the end of the path?

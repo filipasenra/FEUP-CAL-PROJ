@@ -20,8 +20,12 @@ public:
 		return this->info;
 	}
 
-	int getStart(){
+	int getStart() const {
 		return this->start;
+	}
+
+	bool operator < (const Info_calendar & info){
+		return (this->start < info.getStart());
 	}
 };
 

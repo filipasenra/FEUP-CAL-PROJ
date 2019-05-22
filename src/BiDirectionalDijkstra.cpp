@@ -86,7 +86,7 @@ Graph<Spot> bidirectionaldijsktra(Graph<Spot> graph, Spot origin, Spot final) {
 			break;
 		}
 
-		if (invertedGraph.findVertex(v->getInfo())->visited) {
+		if (invertedGraph.findVertex(v->getInfo())->getDist() != INF) {
 
 			double totalWeightTmp = graph.findVertex(v->getInfo())->getDist()
 					+ invertedGraph.findVertex(v->getInfo())->getDist();
@@ -121,7 +121,8 @@ Graph<Spot> bidirectionaldijsktra(Graph<Spot> graph, Spot origin, Spot final) {
 			break;
 		}
 
-		if (graph.findVertex(v2->getInfo())->visited) {
+		if (graph.findVertex(v2->getInfo())->getDist() != INF) {
+
 			double totalWeightTmp = graph.findVertex(v2->getInfo())->getDist()
 					+ invertedGraph.findVertex(v2->getInfo())->getDist();
 
@@ -148,7 +149,6 @@ Graph<Spot> bidirectionaldijsktra(Graph<Spot> graph, Spot origin, Spot final) {
 	}
 
 	//getting path
-
 	Graph<Spot> graph1_after = graph.getPathGraph(origin, spotFinish);
 	Graph<Spot> graph2_after = invertedGraph.getPathGraph(final, spotFinish);
 

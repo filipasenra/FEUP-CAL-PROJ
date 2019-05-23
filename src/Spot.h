@@ -13,10 +13,14 @@ private:
 public:
 
 	Coordinates(double x, double y) :
-			coordinates_x(x), coordinates_y(y) {};
+			coordinates_x(x), coordinates_y(y) {
+	}
+	;
 
 	Coordinates() :
-				coordinates_x(0), coordinates_y(0) {};
+			coordinates_x(0), coordinates_y(0) {
+	}
+	;
 
 	double getCoordinates_x() {
 		return coordinates_x;
@@ -39,10 +43,12 @@ public:
 
 	PublicTransp publicTransp;
 
-	Spot(){};
+	Spot() {
+	}
+	;
 
-	Spot(int id, double coordinates_x, double coordinates_y, double lati = 0, double longi =
-			0) {
+	Spot(int id, double coordinates_x, double coordinates_y, double lati = 0,
+			double longi = 0) {
 		this->x_y = Coordinates(coordinates_x, coordinates_y);
 		this->lat_long = Coordinates(lati, longi);
 		this->id = id;
@@ -58,7 +64,6 @@ public:
 	int getId() {
 		return id;
 	}
-
 
 	double getCoordinates_x() {
 		return this->x_y.getCoordinates_x();
@@ -80,8 +85,38 @@ public:
 		return (publicTransp.subway.size() != 0);
 	}
 
-	Coordinates getLatiLong(){
+	Coordinates getLatiLong() {
 		return lat_long;
+	}
+
+	bool hasSameBusStation(Spot spot) {
+
+		for (int i = 0; i < spot.publicTransp.bus.size(); i++) {
+
+			for (int j = 0; j < this->publicTransp.bus.size(); j++) {
+				if (spot.publicTransp.bus.at(i).line
+						== this->publicTransp.bus.at(j).line) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	bool hasSameSubWayStation(Spot spot) {
+
+		for (int i = 0; i < spot.publicTransp.subway.size(); i++) {
+
+			for (int j = 0; j < this->publicTransp.subway.size(); j++) {
+				if (spot.publicTransp.subway.at(i).line
+						== this->publicTransp.subway.at(j).line) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 };
 

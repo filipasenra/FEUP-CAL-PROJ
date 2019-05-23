@@ -2,7 +2,7 @@
 #define _TYPE_
 
 class TranspStop {
-protected:
+public:
 	int id_nearby;
 	string codStop;
 	string line;
@@ -21,6 +21,7 @@ enum TypeBusStop {
 };
 
 class Bus: public TranspStop {
+
 	string codZone;
 	string county;
 	string parish;

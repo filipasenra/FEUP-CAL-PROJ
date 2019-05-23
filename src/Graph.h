@@ -26,12 +26,13 @@ template<class T>
 class Vertex {
 	T info;                // contents
 
-	Vertex<T> *path = nullptr;
 	int queueIndex = 0; 		// required by MutablePriorityQueue
 	vector<Vertex<T>*> disjSet;
 	void addEdge(Vertex<T> *dest, double w);
 
 public:
+
+	Vertex<T> *path = nullptr;
 	vector<Edge<T> > adj;  // outgoing edges
 	bool visited = false;          // auxiliary field
 	double dist = 0;
@@ -137,10 +138,12 @@ Vertex<T> * Edge<T>::getDest() const {
 template<class T>
 class Graph {
 	vector<Vertex<T> *> vertexSet;    // vertex set
-	bool nodesReset = true;
 
 
 public:
+
+	bool nodesReset = true;
+
 	Vertex<T> *findVertex(const T &in) const;
 	bool addVertex(const T &in);
 	bool addVertex(Vertex<T> * new_vertex);
@@ -154,7 +157,7 @@ public:
 	bool relax(Vertex<T> *v, Vertex<T> *w, double weight);
 	int findVertexIdx(const T &in) const;
 	void dfs();
-	void bfs();
+	void bfs(T & origin);
 	void visitDFS(Vertex<T> * vertex);
 
 
@@ -360,7 +363,7 @@ Graph<T> Graph<T>::getPathGraph(const T &origin, const T &dest) const {
 		if (old != nullptr) {
 
 			//let's get the weight of the edge!
-			for (int i = 0; i < v->adj.size(); i++) {
+			for (unsigned int i = 0; i < v->adj.size(); i++) {
 
 				if (v->adj.at(i).getDest()->getInfo().getId()
 						== old->getInfo().getId()) {
@@ -387,7 +390,7 @@ void Graph<T>::visitDFS(Vertex<T> * vertex){
 
 	vector<Edge<T> > vec = vertex->adj;
 
-	for(int i = 0; i < vec.size(); i++){
+	for(unsigned int i = 0; i < vec.size(); i++){
 
 		if(vec.at(i).dest->visited)
 			continue;
@@ -399,12 +402,12 @@ void Graph<T>::visitDFS(Vertex<T> * vertex){
 template<class T>
 void  Graph<T>::dfs(){
 
-	for(int i = 0; i < this->vertexSet.size(); i++){
+	for(unsigned int i = 0; i < this->vertexSet.size(); i++){
 
 		vertexSet.at(i)->visited = false;
 	}
 
-	for(int i = 0; i < this->vertexSet.size(); i++){
+	for(unsigned int i = 0; i < this->vertexSet.size(); i++){
 
 		if(vertexSet.at(i)->visited)
 			continue;
@@ -415,7 +418,7 @@ void  Graph<T>::dfs(){
 
 
 template<class T>
-void Graph<T>::bfs(){
+void Graph<T>::bfs(T & origin){
 
 	for(int i = 0; this->vertexSet.size(); i++){
 
@@ -424,8 +427,9 @@ void Graph<T>::bfs(){
 
 
 	MutablePriorityQueue<Vertex<T>> q;
-	q.insert(vertexSet.at(0));
-	vertexSet.at(0).visited = true;
+	Vertex<T> * begin = this->findVertex(origin);
+	q.insert(*begin);
+	begin->visited = true;
 
 	while(!q.empty())
 	{

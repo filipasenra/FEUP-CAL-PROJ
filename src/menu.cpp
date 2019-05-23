@@ -14,6 +14,7 @@ using namespace std;
 menu::menu() {
 	this->graph = parseMap("T11_nodes_X_Y_Aveiro.txt", "T11_edges_Aveiro.txt",
 			"T11_nodes_lat_lon_Aveiro.txt");
+
 }
 
 void menu::initial() {
@@ -155,6 +156,12 @@ void menu::showMapSchedule() {
 
 	for (size_t i = 1; i < this->schedule.size(); i++) {
 		Graph<Spot> new_graph;
+
+		if (graph.findVertex(schedule.at(i).getSpot())->visited) {
+			i++;
+			cout << "Spot is disconected!\n";
+			continue;
+		}
 
 		graph.dijkstraShortestPath(schedule.at(i - 1).getSpot(),
 				schedule.at(i).getSpot());

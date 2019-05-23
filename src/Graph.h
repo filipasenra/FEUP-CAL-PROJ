@@ -26,14 +26,15 @@ template<class T>
 class Vertex {
 	T info;                // contents
 
-	Vertex<T> *path = nullptr;
 	int queueIndex = 0; 		// required by MutablePriorityQueue
 	vector<Vertex<T>*> disjSet;
 	void addEdge(Vertex<T> *dest, double w);
 
 public:
+
+	Vertex<T> *path = nullptr;
 	vector<Edge<T> > adj;  // outgoing edges
-	bool visited;          // auxiliary field
+	bool visited = false;          // auxiliary field
 	double dist = 0;
 
 	Vertex(T in);
@@ -137,10 +138,12 @@ Vertex<T> * Edge<T>::getDest() const {
 template<class T>
 class Graph {
 	vector<Vertex<T> *> vertexSet;    // vertex set
-	bool nodesReset = true;
 
 
 public:
+
+	bool nodesReset = true;
+
 	Vertex<T> *findVertex(const T &in) const;
 	bool addVertex(const T &in);
 	bool addVertex(Vertex<T> * new_vertex);
@@ -150,28 +153,18 @@ public:
 	Graph<T> getPathGraph(const T &origin, const T &dest) const;
 
 
-	// Fp05
 	Vertex<T> * initSingleSource(const T &orig);
 	bool relax(Vertex<T> *v, Vertex<T> *w, double weight);
-	//double ** W = nullptr;   // dist
-	//int **P = nullptr;   // path
 	int findVertexIdx(const T &in) const;
+	void dfs();
+	void bfs(T & origin);
+	void visitDFS(Vertex<T> * vertex);
 
-	// Fp05 - single source
+
 	void dijkstraShortestPath(const T &s, const T &d);
-	void dijkstraShortestPathBiD(const T &s, const T &d);
-	void unweightedShortestPath(const T &s);
-	void bellmanFordShortestPath(const T &s);
 	vector<T> getPath(const T &origin, const T &dest) const;
 
-	// Fp05 - all pairs
-	void floydWarshallShortestPath();
-	vector<T> getfloydWarshallPath(const T &origin, const T &dest) const;
 	~Graph();
-
-	// Fp07 - minimum spanning tree
-	vector<Vertex<T>*> calculatePrim();
-	vector<Vertex<T>*> calculateKruskal();
 
 	void ResetNodes();
 };
@@ -370,7 +363,7 @@ Graph<T> Graph<T>::getPathGraph(const T &origin, const T &dest) const {
 		if (old != nullptr) {
 
 			//let's get the weight of the edge!
-			for (int i = 0; i < v->adj.size(); i++) {
+			for (unsigned int i = 0; i < v->adj.size(); i++) {
 
 				if (v->adj.at(i).getDest()->getInfo().getId()
 						== old->getInfo().getId()) {
@@ -388,6 +381,78 @@ Graph<T> Graph<T>::getPathGraph(const T &origin, const T &dest) const {
 
 	return graph;
 }
+
+
+template<class T>
+void Graph<T>::visitDFS(Vertex<T> * vertex){
+
+	vertex->visited = true;
+
+	vector<Edge<T> > vec = vertex->adj;
+
+	for(unsigned int i = 0; i < vec.size(); i++){
+
+		if(vec.at(i).dest->visited)
+			continue;
+
+		visitDFS(vec.at(i).dest);
+	}
+}
+
+template<class T>
+void  Graph<T>::dfs(){
+
+	for(unsigned int i = 0; i < this->vertexSet.size(); i++){
+
+		vertexSet.at(i)->visited = false;
+	}
+
+	for(unsigned int i = 0; i < this->vertexSet.size(); i++){
+
+		if(vertexSet.at(i)->visited)
+			continue;
+
+		visitDFS(vertexSet.at(i));
+	}
+}
+
+
+template<class T>
+void Graph<T>::bfs(T & origin){
+
+	for(int i = 0; this->vertexSet.size(); i++){
+
+		vertexSet.at(i)->visited = false;
+	}
+
+
+	MutablePriorityQueue<Vertex<T>> q;
+	Vertex<T> * begin = this->findVertex(origin);
+	q.insert(*begin);
+	begin->visited = true;
+
+	while(!q.empty())
+	{
+		Vertex<T> vertex = q.extractMin();
+
+		vector<Edge<T>> edjes = vertex.adj;
+
+		for(int i = 0; i < edjes.size(); i++)
+		{
+			if(edjes.at(i).dest->visited)
+				continue;
+
+			edjes.at(i)->visited = true;
+			q.insert(edjes.at(i).dest);
+		}
+
+
+	}
+
+
+
+}
+
 
 /**************** All Pairs Shortest Path  ***************/
 

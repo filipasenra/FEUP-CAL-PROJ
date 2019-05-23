@@ -9,12 +9,35 @@
 #include <iostream>
 #include "mapParser.h"
 #include "Draw.h"
+#include "Graph.h"
+#include "BiDirectionalDijkstra.h"
+#include <vector>
 
 using namespace std;
 menu::menu() {
 	this->graph = parseMap("T11_nodes_X_Y_Aveiro.txt", "T11_edges_Aveiro.txt",
 			"T11_nodes_lat_lon_Aveiro.txt");
 }
+
+
+
+int getPathWeight(){
+
+}
+
+void nearestneighbour(Spot origin, Spot dest, Graph<Spot> graph){
+	vector<Spot> bus;
+	for (size_t i = 0; i < graph.getVertexSet().size(); i++){
+		if (graph.getVertexSet().at(i)->getInfo().hasBusStop()){
+			bus.push_back(graph.getVertexSet().at(i)->getInfo());
+		}
+
+	}
+	return;
+}
+
+
+
 
 void menu::initial() {
 	clearScreen();
@@ -58,7 +81,7 @@ void menu::initial() {
 		getchar();
 		break;
 	case 2:
-		this->addElementSchedule();
+		this->addElementScedule();
 		break;
 	case 3:
 		this->showMapSchedule();
@@ -70,7 +93,7 @@ void menu::initial() {
 
 }
 
-void menu::addElementSchedule() {
+void menu::addElementScedule() {
 
 	cin.clear();
 	cin.ignore(10000, '\n');

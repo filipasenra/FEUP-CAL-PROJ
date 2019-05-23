@@ -158,6 +158,57 @@ void parseBusFile(Graph<Spot> * graph, std::string busFile) {
 
 }
 
+
+void parseSubwayFile(Graph<Spot> * graph, std::string subwayFile){
+	ifstream file_subway;
+	file_subway.open(subwayFile);
+
+	if (!file_subway.is_open()) {
+		cout << "Error opening " << subwayFile << ".\n";
+		exit(2);
+	}
+
+	string line;
+	int number_of_nodes = 0;
+
+	std::getline(file_subway, line);
+	std::istringstream iss(line);
+	iss >> number_of_nodes;
+
+	while (std::getline(file_subway, line) && number_of_nodes != 0) {
+		number_of_nodes--;
+
+		int id;
+		string nome;
+		string linhas;
+		string linha;
+
+		sscanf(line.c_str(), "(%d, '%s', [%s])", &id, &nome, &linhas);
+
+		for (size_t i = 0; i < linhas.size(); i++){
+			if (linhas[2] == ')'){
+				break;
+			}
+			else {
+
+				linha = linhas[2];
+				linhas = linhas.substr(5, linhas.size());
+				Vertex<Spot> * vertex = graph->findVertex(Spot(id));
+
+				if(vertex == NULL)
+				continue;
+				Subway subway(id, nome, linha);
+				vertex->getPointerInfo()->publicTransp.subway.push_back(subway);
+			}
+		}
+
+
+
+
+	}
+
+}
+
 Graph<Spot> parseMap(std::string X_YFile, std::string edgesFile,
 		std::string Lat_LongFile, std::string busFile /*,
 		 std::string tagsFile*/) {

@@ -31,7 +31,7 @@ public:
 	bool terminate = false;
 	menu();
 	void initial();
-	void addElementSchedule();
+	void addElementScedule();
 	void makePath();
 	void showMapSchedule();
 

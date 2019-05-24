@@ -117,6 +117,7 @@ void parseEdgesFile(Graph * graph, std::string edgesFile) {
 										- b->getInfo().getCoordinates_y(), 2));
 
 		a->addEdge(b, weight);
+		b->addEdge(a, weight);
 
 	}
 

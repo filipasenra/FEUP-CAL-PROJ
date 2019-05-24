@@ -20,33 +20,37 @@ int drawGraph(Graph graph, int width, int height) {
 		Spot info = vec[i]->getInfo();
 
 		gv->addNode(info.getId(),
-				info.getCoordinates_x()-first.getCoordinates_x(),
-				info.getCoordinates_y()-first.getCoordinates_y());
+				info.getCoordinates_x() - first.getCoordinates_x(),
+				info.getCoordinates_y() - first.getCoordinates_y());
 
-		if(info.hasSubwayStop())
-			{
+		if (info.hasSubwayStop()) {
 			gv->setVertexIcon(info.getId(), "images/subway.jpg");
-			}
-		else if(info.hasBusStop())
+		} else if (info.hasBusStop())
 			gv->setVertexIcon(info.getId(), "images/stcp.png");
 	}
 
 	for (unsigned int i = 0; i < vec.size(); i++) {
-			Spot info = vec[i]->getInfo();
+		Spot info = vec[i]->getInfo();
 
-			vector<Edge > outgoingEdges = vec[i]->getEdjes();
+		vector<Edge> outgoingEdges = vec[i]->getEdjes();
 
-			for (unsigned int j = 0; j < outgoingEdges.size(); j++) {
+		for (unsigned int j = 0; j < outgoingEdges.size(); j++) {
 
-				gv->addEdge(n_edge, outgoingEdges[j].getOrig()->getInfo().getId(),
+			if (graph.findVertexIdx(outgoingEdges[j].getOrig()->getInfo())
+					< graph.findVertexIdx(
+							outgoingEdges[j].getDest()->getInfo()))
+
+							{
+				gv->addEdge(n_edge,
+						outgoingEdges[j].getOrig()->getInfo().getId(),
+
 						outgoingEdges[j].getDest()->getInfo().getId(),
-						EdgeType::DIRECTED);
+						EdgeType::UNDIRECTED);
 
-
-				//gv->setEdgeLabel(n_edge, to_string(outgoingEdges[j].getWeight()));
 				n_edge++;
 			}
 		}
+	}
 
 	return 0;
 

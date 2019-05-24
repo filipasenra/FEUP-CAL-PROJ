@@ -47,13 +47,15 @@ public:
 	Vertex * initSingleSource(const Spot &orig);
 	bool relax(Vertex *v, Vertex *w, double weight);
 	int findVertexIdx(const Spot &in) const;
-	void dfs();
+	void dfs(Spot & origin);
 	void bfs(Spot & origin);
 	void visitDFS(Vertex * vertex);
+	bool isPathPossible(const Spot & origin, const Spot & end);
 
 
 	void dijkstraShortestPath(const Spot &s, const Spot &d);
 	vector<Spot> getPath(const Spot &origin, const Spot &dest) const;
+	void dijkstraFastestPath(const Spot & origin, const Spot & end);
 
 	~Graph();
 

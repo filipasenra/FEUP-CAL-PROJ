@@ -5,6 +5,10 @@
  *      Author: filip
  */
 
+#define VELOCITY_BUS 30 //(km/h)
+#define VELOCITY_SUBWAY 40//(km/h)
+#define VELOCITY_FOOT 40//(km/h)
+
 #include "Graph.h"
 
 int Graph::getNumVertex() const {
@@ -66,7 +70,8 @@ bool Graph::addVertex(Vertex * new_vertex) {
 		return false;
 
 	order.insert(
-				pair<unsigned int, unsigned int>(new_vertex->getInfo().getId(), vertexSet.size()));
+			pair<unsigned int, unsigned int>(new_vertex->getInfo().getId(),
+					vertexSet.size()));
 
 	vertexSet.push_back(new_vertex);
 	return true;
@@ -239,25 +244,24 @@ void Graph::visitDFS(Vertex * vertex) {
 	}
 }
 
-void Graph::dfs() {
+void Graph::dfs(Spot & origin) {
 
 	for (unsigned int i = 0; i < this->vertexSet.size(); i++) {
 
 		vertexSet.at(i)->visited = false;
 	}
 
-	for (unsigned int i = 0; i < this->vertexSet.size(); i++) {
+	Vertex * vertex = this->findVertex(origin);
 
-		if (vertexSet.at(i)->visited)
-			continue;
+	if (vertex == NULL)
+		return;
 
-		visitDFS(vertexSet.at(i));
-	}
+	visitDFS(vertex);
 }
 
 void Graph::bfs(Spot & origin) {
 
-	for (int i = 0; this->vertexSet.size(); i++) {
+	for (int i = 0; i < this->vertexSet.size(); i++) {
 
 		vertexSet.at(i)->visited = false;
 	}
@@ -284,6 +288,92 @@ void Graph::bfs(Spot & origin) {
 
 }
 
+bool Graph::isPathPossible(const Spot & origin, const Spot & end) {
+
+	for (int i = 0; i < this->vertexSet.size(); i++) {
+
+		vertexSet.at(i)->visited = false;
+	}
+
+	MutablePriorityQueue<Vertex> q;
+	Vertex * begin = this->findVertex(origin);
+	q.insert(begin);
+	begin->visited = true;
+
+	while (!q.empty()) {
+		Vertex * vertex = q.extractMin();
+
+		vector<Edge> edjes = vertex->adj;
+
+		for (unsigned int i = 0; i < edjes.size(); i++) {
+
+			if(edjes.at(i).dest->getInfo() == end)
+				return true;
+
+			if (edjes.at(i).dest->visited)
+				continue;
+
+			edjes.at(i).dest->visited = true;
+			q.insert(edjes.at(i).dest);
+		}
+
+		if(q.empty())
+		cout << "empty\n";
+		else
+			cout << "not emplty\n";
+
+	}
+
+	return false;
+
+}
+
+void Graph::dijkstraFastestPath(const Spot & origin, const Spot & end) {
+
+	this->ResetNodes();
+
+	auto s = initSingleSource(origin);
+	MutablePriorityQueue<Vertex> q;
+	q.insert(s);
+
+	while (!q.empty()) {
+
+		auto v = q.extractMin();
+
+//Has it arrived at the end of the path?
+		if (v->getInfo() == end)
+			return;
+
+		for (auto e : v->adj) {
+			auto oldDist = e.getDest()->dist;
+
+			double weight = e.getWeight();
+
+			if (v->getInfo().hasSameSubWayStation(e.getDest()->getInfo())) {
+				weight /= VELOCITY_SUBWAY;
+			} else if (v->getInfo().hasSameBusStation(e.getDest()->getInfo())) {
+				weight /= VELOCITY_BUS;
+			} else {
+				weight /= VELOCITY_FOOT;
+			}
+
+			if (v->dist + weight < oldDist) {
+				e.getDest()->dist = v->dist + weight;
+				e.getDest()->path = v;
+
+				if (oldDist == INF)
+				q.insert(e.getDest());
+				else
+				q.decreaseKey(e.getDest());
+			}
+		}
+
+	}
+
+	this->nodesReset = false;
+
+}
+
 /**************** All Pairs Shortest Path  ***************/
 
 void deleteMatrix(Spot **m, int n) {
@@ -296,7 +386,7 @@ void deleteMatrix(Spot **m, int n) {
 }
 
 Graph::~Graph() {
-	//deleteMatrix(W, vertexSet.size());
-	//deleteMatrix(P, vertexSet.size());
+//deleteMatrix(W, vertexSet.size());
+//deleteMatrix(P, vertexSet.size());
 }
 

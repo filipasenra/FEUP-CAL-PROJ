@@ -22,6 +22,13 @@ int drawGraph(Graph graph, int width, int height) {
 		gv->addNode(info.getId(),
 				info.getCoordinates_x()-first.getCoordinates_x(),
 				info.getCoordinates_y()-first.getCoordinates_y());
+
+		if(info.hasSubwayStop())
+			{
+			gv->setVertexIcon(info.getId(), "images/subway.jpg");
+			}
+		else if(info.hasBusStop())
+			gv->setVertexIcon(info.getId(), "images/stcp.png");
 	}
 
 	for (unsigned int i = 0; i < vec.size(); i++) {

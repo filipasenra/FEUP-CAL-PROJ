@@ -105,7 +105,7 @@ void parseEdgesFile(Graph * graph, std::string edgesFile) {
 		Vertex * a = graph->findVertex(Spot(id1));
 		Vertex * b = graph->findVertex(Spot(id2));
 
-		if(a == NULL || b == NULL)
+		if (a == NULL || b == NULL)
 			continue;
 
 		weight = sqrt(
@@ -146,22 +146,23 @@ void parseBusFile(Graph * graph, std::string busFile) {
 		char codStop[10], codLine[10];
 
 		//%s eats the comma %[^,\n] does not
-		sscanf(line.c_str(), "(%d, %[^,\n], %[^,\n], %[^,\n], %[^,\n], %[^,\n], %[^,\n], %[^,\n])", &id, codStop, codLine, NULL, NULL, NULL, NULL, NULL);
+		sscanf(line.c_str(),
+				"(%d, %[^,\n], %[^,\n], %[^,\n], %[^,\n], %[^,\n], %[^,\n], %[^)\n])",
+				&id, codStop, codLine, NULL, NULL, NULL, NULL, NULL);
 
 		Vertex * vertex = graph->findVertex(Spot(id));
 
-		if(vertex == NULL)
+		if (vertex == NULL)
 			continue;
 
-		Bus bus(id, string (codStop), string (codLine));
+		Bus bus(id, string(codStop), string(codLine));
 		vertex->getPointerInfo()->publicTransp.bus.push_back(bus);
 
 	}
 
 }
 
-
-void parseSubwayFile(Graph * graph, std::string subwayFile){
+void parseSubwayFile(Graph * graph, std::string subwayFile) {
 	ifstream file_subway;
 	file_subway.open(subwayFile);
 
@@ -181,25 +182,28 @@ void parseSubwayFile(Graph * graph, std::string subwayFile){
 		number_of_nodes--;
 
 		int id;
-		string nome;
-		string linhas;
+		char nome1[250], linhas1[250];
 		string linha;
 
-		sscanf(line.c_str(), "(%d, '%s', [%s])", &id, &nome, &linhas);
+		sscanf(line.c_str(), "(%d, '%[^'\n]', %[^)\n])", &id, nome1, linhas1);
 
-		for (size_t i = 0; i < linhas.size(); i++){
-			if (linhas[2] == ')'){
+		string nome(nome1);
+		string linhas(linhas1);
+
+		for (size_t i = 0; i < linhas.size(); i++) {
+
+			if (linhas[2] == ')') {
 				break;
-			}
-			else {
+			} else {
 
 				linha = linhas[2];
 				linhas = linhas.substr(5, linhas.size());
 				Vertex * vertex = graph->findVertex(Spot(id));
 
-				if(vertex == NULL)
-				continue;
+				if (vertex == NULL)
+					continue;
 				Subway subway(id, nome, linha);
+
 				vertex->getPointerInfo()->publicTransp.subway.push_back(subway);
 			}
 		}
@@ -209,8 +213,8 @@ void parseSubwayFile(Graph * graph, std::string subwayFile){
 }
 
 Graph parseMap(std::string X_YFile, std::string edgesFile,
-		std::string Lat_LongFile, std::string busFile /*,
-		 std::string tagsFile*/) {
+		std::string Lat_LongFile, std::string busFile,
+		std::string subawayFile) {
 
 	Graph graph;
 
@@ -218,8 +222,11 @@ Graph parseMap(std::string X_YFile, std::string edgesFile,
 
 	parseEdgesFile(&graph, edgesFile);
 
-	if(busFile != "")
+	if (busFile != "")
 		parseBusFile(&graph, busFile);
+
+	if (subawayFile != "")
+		parseSubwayFile(&graph, subawayFile);
 
 	return graph;
 

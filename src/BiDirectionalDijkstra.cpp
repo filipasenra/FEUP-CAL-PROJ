@@ -4,7 +4,7 @@ void invertGraph(Graph * original, Graph * final) {
 
 	vector<Vertex *> vec = original->getVertexSet();
 
-	for (int i = 0; i < vec.size(); i++) {
+	for (unsigned int i = 0; i < vec.size(); i++) {
 
 		Vertex * invertedVertex = vec.at(i);
 
@@ -13,12 +13,12 @@ void invertGraph(Graph * original, Graph * final) {
 
 	//Inverting edges
 
-	for (int i = 0; i < vec.size(); i++) {
+	for (unsigned int i = 0; i < vec.size(); i++) {
 
 		Vertex* vertex = vec.at(i);
 		vector<Edge> edjes = vertex->getEdjes();
 
-		for (int j = 0; j < edjes.size(); j++) {
+		for (unsigned int j = 0; j < edjes.size(); j++) {
 
 			final->addEdge(edjes.at(j).getDest()->getInfo(), vertex->getInfo(),
 					edjes.at(j).getWeight());
@@ -31,19 +31,19 @@ void addingGraph(Graph * source, Graph * to_be_added) {
 
 	vector<Vertex *> vec = to_be_added->getVertexSet();
 
-	for (int i = 0; i < vec.size(); i++) {
+	for (unsigned int i = 0; i < vec.size(); i++) {
 
 		Vertex * invertedVertex = vec.at(i);
 
 		source->addVertex(invertedVertex->getInfo());
 	}
 
-	for (int i = 0; i < vec.size(); i++) {
+	for (unsigned int i = 0; i < vec.size(); i++) {
 
 		Vertex * vertex = vec.at(i);
 		vector<Edge> edjes = vertex->getEdjes();
 
-		for (int j = 0; j < edjes.size(); j++) {
+		for (unsigned int j = 0; j < edjes.size(); j++) {
 			source->addEdge(vertex->getInfo(), edjes.at(j).getDest()->getInfo(),
 					edjes.at(j).getWeight());
 		}

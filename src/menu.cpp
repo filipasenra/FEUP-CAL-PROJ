@@ -16,7 +16,7 @@
 using namespace std;
 menu::menu() {
 	this->graph = parseMap("T11_nodes_X_Y_Porto.txt", "T11_edges_Porto.txt",
-			"T11_nodes_lat_lon_Porto.txt");
+			"T11_nodes_lat_lon_Porto.txt", "stcp_routes_Porto.txt", "metro_routes_Porto.txt");
 
 }
 
@@ -180,9 +180,8 @@ void menu::showMapSchedule() {
 	for (size_t i = 1; i < this->schedule.size(); i++) {
 		Graph new_graph;
 
-		if (graph.findVertex(schedule.at(i).getSpot())->visited) {
-			i++;
-			cout << "Spot is disconected!\n";
+		if (!graph.isPathPossible(schedule.at(i - 1).getSpot(), schedule.at(i).getSpot())) {
+			cout << "Path is not possible between " << schedule.at(i - 1).getSpot().getId() << " and " << schedule.at(i).getSpot().getId() << "!\n";
 			continue;
 		}
 

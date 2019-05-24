@@ -28,7 +28,6 @@ class Vertex {
 
 	int queueIndex = 0; 		// required by MutablePriorityQueue
 	vector<Vertex<T>*> disjSet;
-	void addEdge(Vertex<T> *dest, double w);
 
 public:
 
@@ -38,6 +37,7 @@ public:
 	double dist = 0;
 
 	Vertex(T in);
+	void addEdge(Vertex<T> *dest, double w);
 	bool operator<(Vertex<T> & vertex) const; // // required by MutablePriorityQueue
 	T getInfo() const;
 	T* getPointerInfo() {

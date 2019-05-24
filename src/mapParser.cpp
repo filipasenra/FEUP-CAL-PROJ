@@ -5,6 +5,10 @@
 #include <iomanip>
 #include "Spot.h"
 #include <math.h>
+#include <map>
+#include <iostream>
+
+map <unsigned int, unsigned int> order;
 
 void parseX_YFile(Graph<Spot> * graph, std::string X_YFile,
 		std::string Lat_LongFile) {
@@ -65,7 +69,10 @@ void parseX_YFile(Graph<Spot> * graph, std::string X_YFile,
 		}
 
 		Spot spot(id, coordinates_x, coordinates_y, latitude, longitude);
-		graph->addVertex(spot);
+
+		order.insert(pair<unsigned int,unsigned int>(id, graph->getNumVertex()));
+
+		graph->addVertex(new Vertex<Spot>(spot));
 
 	}
 
@@ -88,7 +95,7 @@ void parseEdgesFile(Graph<Spot> * graph, std::string edgesFile) {
 	std::istringstream iss(line);
 	iss >> number_of_nodes;
 
-	int n_edge = 0;
+	vector<Vertex<Spot> *> vec = graph->getVertexSet();
 
 	while (std::getline(file_edges, line) && number_of_nodes != 0) {
 		number_of_nodes--;
@@ -98,13 +105,15 @@ void parseEdgesFile(Graph<Spot> * graph, std::string edgesFile) {
 		sscanf(line.c_str(), "(%d, %d)", &id1, &id2);
 
 		double weight;
-		Spot spot = Spot(id1);
-		Spot spot2 = Spot(id2);
-		Vertex<Spot> * a = graph->findVertex(spot);
-		Vertex<Spot> * b = graph->findVertex(spot2);
 
-		if (a == NULL || b == NULL)
+		int index1 = order[id1];
+		int index2 = order[id2];
+
+		if (index1 == NULL || index2 == NULL)
 			continue;
+
+		Vertex<Spot> * a = vec.at(index1);
+		Vertex<Spot> * b = vec.at(index2);
 
 		weight = sqrt(
 				pow(
@@ -114,7 +123,7 @@ void parseEdgesFile(Graph<Spot> * graph, std::string edgesFile) {
 								a->getInfo().getCoordinates_y()
 										- b->getInfo().getCoordinates_y(), 2));
 
-		graph->addEdge(Spot(id1), Spot(id2), weight);
+		a->addEdge(b, weight);
 
 	}
 
@@ -201,9 +210,6 @@ void parseSubwayFile(Graph<Spot> * graph, std::string subwayFile){
 				vertex->getPointerInfo()->publicTransp.subway.push_back(subway);
 			}
 		}
-
-
-
 
 	}
 

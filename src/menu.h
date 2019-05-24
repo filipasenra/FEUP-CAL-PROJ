@@ -24,7 +24,7 @@
 
 class menu {
 private:
-	Graph<Spot> graph;
+	Graph graph;
 	vector<Info_calendar> schedule;
 
 public:

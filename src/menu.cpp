@@ -15,8 +15,8 @@
 
 using namespace std;
 menu::menu() {
-	this->graph = parseMap("T11_nodes_X_Y_Aveiro.txt", "T11_edges_Aveiro.txt",
-			"T11_nodes_lat_lon_Aveiro.txt");
+	this->graph = parseMap("T11_nodes_X_Y_Porto.txt", "T11_edges_Porto.txt",
+			"T11_nodes_lat_lon_Porto.txt");
 
 }
 
@@ -26,7 +26,7 @@ int getPathWeight(){
 
 }
 
-void nearestneighbour(Spot origin, Spot dest, Graph<Spot> graph){
+void nearestneighbour(Spot origin, Spot dest, Graph graph){
 	vector<Spot> bus;
 	for (size_t i = 0; i < graph.getVertexSet().size(); i++){
 		if (graph.getVertexSet().at(i)->getInfo().hasBusStop()){
@@ -117,7 +117,7 @@ void menu::addElementScedule() {
 		cout << "Latitude: ";
 	}
 
-	vector<Vertex<Spot> *> vec = graph.getVertexSet();
+	vector<Vertex *> vec = graph.getVertexSet();
 	Spot spot;
 	bool passed;
 
@@ -175,10 +175,10 @@ void menu::addElementScedule() {
 
 void menu::showMapSchedule() {
 
-	Graph<Spot> graphPath;
+	Graph graphPath;
 
 	for (size_t i = 1; i < this->schedule.size(); i++) {
-		Graph<Spot> new_graph;
+		Graph new_graph;
 
 		if (graph.findVertex(schedule.at(i).getSpot())->visited) {
 			i++;

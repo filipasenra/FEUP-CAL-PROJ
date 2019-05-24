@@ -13,10 +13,10 @@
 #include "Spot.h"
 #include "MutablePriorityQueue.h"
 
-void invertGraph(Graph<Spot> * original, Graph<Spot> * final);
+void invertGraph(Graph * original, Graph * final);
 
-void addingGraph(Graph<Spot> * source, Graph<Spot> * to_be_added);
+void addingGraph(Graph * source, Graph * to_be_added);
 
-Graph<Spot> bidirectionaldijsktra(Graph<Spot> graph, Spot origin, Spot final);
+Graph bidirectionaldijsktra(Graph graph, Spot origin, Spot final);
 
 #endif /* SRC_BIDIRECTIONALDIJKSTRA_H_ */

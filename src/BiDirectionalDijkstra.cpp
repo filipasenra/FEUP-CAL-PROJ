@@ -1,12 +1,12 @@
 #include "BiDirectionalDijkstra.h"
 
-void invertGraph(Graph<Spot> * original, Graph<Spot> * final) {
+void invertGraph(Graph * original, Graph * final) {
 
-	vector<Vertex<Spot> *> vec = original->getVertexSet();
+	vector<Vertex *> vec = original->getVertexSet();
 
 	for (int i = 0; i < vec.size(); i++) {
 
-		Vertex<Spot> * invertedVertex = vec.at(i);
+		Vertex * invertedVertex = vec.at(i);
 
 		final->addVertex(invertedVertex->getInfo());
 	}
@@ -15,8 +15,8 @@ void invertGraph(Graph<Spot> * original, Graph<Spot> * final) {
 
 	for (int i = 0; i < vec.size(); i++) {
 
-		Vertex<Spot> * vertex = vec.at(i);
-		vector<Edge<Spot>> edjes = vertex->getEdjes();
+		Vertex* vertex = vec.at(i);
+		vector<Edge> edjes = vertex->getEdjes();
 
 		for (int j = 0; j < edjes.size(); j++) {
 
@@ -27,21 +27,21 @@ void invertGraph(Graph<Spot> * original, Graph<Spot> * final) {
 
 }
 
-void addingGraph(Graph<Spot> * source, Graph<Spot> * to_be_added) {
+void addingGraph(Graph * source, Graph * to_be_added) {
 
-	vector<Vertex<Spot> *> vec = to_be_added->getVertexSet();
+	vector<Vertex *> vec = to_be_added->getVertexSet();
 
 	for (int i = 0; i < vec.size(); i++) {
 
-		Vertex<Spot> * invertedVertex = vec.at(i);
+		Vertex * invertedVertex = vec.at(i);
 
 		source->addVertex(invertedVertex->getInfo());
 	}
 
 	for (int i = 0; i < vec.size(); i++) {
 
-		Vertex<Spot> * vertex = vec.at(i);
-		vector<Edge<Spot>> edjes = vertex->getEdjes();
+		Vertex * vertex = vec.at(i);
+		vector<Edge> edjes = vertex->getEdjes();
 
 		for (int j = 0; j < edjes.size(); j++) {
 			source->addEdge(vertex->getInfo(), edjes.at(j).getDest()->getInfo(),
@@ -51,9 +51,9 @@ void addingGraph(Graph<Spot> * source, Graph<Spot> * to_be_added) {
 
 }
 
-Graph<Spot> bidirectionaldijsktra(Graph<Spot> graph, Spot origin, Spot final) {
+Graph bidirectionaldijsktra(Graph graph, Spot origin, Spot final) {
 
-	Graph<Spot> invertedGraph;
+	Graph invertedGraph;
 
 	invertGraph(&graph, &invertedGraph);
 
@@ -62,13 +62,13 @@ Graph<Spot> bidirectionaldijsktra(Graph<Spot> graph, Spot origin, Spot final) {
 	//Original graph
 	graph.ResetNodes();
 	auto s = graph.initSingleSource(origin);
-	MutablePriorityQueue<Vertex<Spot>> q;
+	MutablePriorityQueue<Vertex> q;
 	q.insert(s);
 
 	//Inverted Graph
 	invertedGraph.ResetNodes();
 	auto s2 = invertedGraph.initSingleSource(final);
-	MutablePriorityQueue<Vertex<Spot>> q2;
+	MutablePriorityQueue<Vertex> q2;
 	q2.insert(s2);
 
 	Spot spotFinish = final;
@@ -149,10 +149,10 @@ Graph<Spot> bidirectionaldijsktra(Graph<Spot> graph, Spot origin, Spot final) {
 	}
 
 	//getting path
-	Graph<Spot> graph1_after = graph.getPathGraph(origin, spotFinish);
-	Graph<Spot> graph2_after = invertedGraph.getPathGraph(final, spotFinish);
+	Graph graph1_after = graph.getPathGraph(origin, spotFinish);
+	Graph graph2_after = invertedGraph.getPathGraph(final, spotFinish);
 
-	Graph<Spot> graph2_after_dir;
+	Graph graph2_after_dir;
 
 	invertGraph(&(graph2_after), &(graph2_after_dir));
 

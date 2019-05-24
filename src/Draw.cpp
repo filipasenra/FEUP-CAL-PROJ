@@ -2,7 +2,7 @@
 
 #include "edgetype.h"
 
-int drawGraph(Graph<Spot> graph, int width, int height) {
+int drawGraph(Graph graph, int width, int height) {
 
 	//Displaying of the graph
 
@@ -11,10 +11,11 @@ int drawGraph(Graph<Spot> graph, int width, int height) {
 
 	gv->createWindow(width, height);
 
-	vector<Vertex<Spot> *> vec = graph.getVertexSet();
+	vector<Vertex *> vec = graph.getVertexSet();
 	int n_edge = 0;
 
 	Spot first = vec[0]->getInfo();
+
 	for (unsigned int i = 0; i < vec.size(); i++) {
 		Spot info = vec[i]->getInfo();
 
@@ -26,7 +27,7 @@ int drawGraph(Graph<Spot> graph, int width, int height) {
 	for (unsigned int i = 0; i < vec.size(); i++) {
 			Spot info = vec[i]->getInfo();
 
-			vector<Edge<Spot> > outgoingEdges = vec[i]->getEdjes();
+			vector<Edge > outgoingEdges = vec[i]->getEdjes();
 
 			for (unsigned int j = 0; j < outgoingEdges.size(); j++) {
 

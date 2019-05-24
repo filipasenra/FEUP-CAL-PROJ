@@ -13,12 +13,12 @@
 #define VELOCITY_SUBWAY 40//(km/h)
 #define VELOCITY_FOOT 40//(km/h)
 
-void dijkstra(Graph<Spot> * graph, const Spot & origin, const Spot & end) {
+void dijkstra(Graph * graph, const Spot & origin, const Spot & end) {
 
 	graph->ResetNodes();
 
 	auto s = graph->initSingleSource(origin);
-	MutablePriorityQueue<Vertex<Spot>> q;
+	MutablePriorityQueue<Vertex> q;
 	q.insert(s);
 
 	while (!q.empty()) {

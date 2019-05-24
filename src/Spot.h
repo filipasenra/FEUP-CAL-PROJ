@@ -61,7 +61,7 @@ public:
 		this->lat_long = Coordinates();
 	}
 
-	int getId() {
+	int getId() const {
 		return id;
 	}
 
@@ -91,9 +91,9 @@ public:
 
 	bool hasSameBusStation(Spot spot) {
 
-		for (int i = 0; i < spot.publicTransp.bus.size(); i++) {
+		for (unsigned int i = 0; i < spot.publicTransp.bus.size(); i++) {
 
-			for (int j = 0; j < this->publicTransp.bus.size(); j++) {
+			for (unsigned int j = 0; j < this->publicTransp.bus.size(); j++) {
 				if (spot.publicTransp.bus.at(i).line
 						== this->publicTransp.bus.at(j).line) {
 					return true;
@@ -106,9 +106,9 @@ public:
 
 	bool hasSameSubWayStation(Spot spot) {
 
-		for (int i = 0; i < spot.publicTransp.subway.size(); i++) {
+		for (unsigned int i = 0; i < spot.publicTransp.subway.size(); i++) {
 
-			for (int j = 0; j < this->publicTransp.subway.size(); j++) {
+			for (unsigned int j = 0; j < this->publicTransp.subway.size(); j++) {
 				if (spot.publicTransp.subway.at(i).line
 						== this->publicTransp.subway.at(j).line) {
 					return true;

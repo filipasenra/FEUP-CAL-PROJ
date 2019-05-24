@@ -1,14 +1,18 @@
 #ifndef _TYPE_
 #define _TYPE_
 
+#include <string>
+#include <vector>
+#include <iostream>
+
 class TranspStop {
 public:
 	int id_nearby;
-	string codStop;
-	string line;
+	std::string codStop;
+	std::string line;
 
 public:
-	TranspStop(int id_nearby, string codStop, string line) {
+	TranspStop(int id_nearby, std::string codStop, std::string line) {
 
 		this->id_nearby = id_nearby;
 		this->codStop = codStop;
@@ -22,14 +26,14 @@ enum TypeBusStop {
 
 class Bus: public TranspStop {
 
-	string codZone;
-	string county;
-	string parish;
-	string adress;
+	std::string codZone;
+	std::string county;
+	std::string parish;
+	std::string adress;
 	TypeBusStop typeStop = MARKING;
 
 public:
-	Bus(int id_nearby, string codStop, string line) :
+	Bus(int id_nearby, std::string codStop, std::string line) :
 			TranspStop(id_nearby, codStop, line) {
 	}
 	;
@@ -37,7 +41,7 @@ public:
 
 class Subway: public TranspStop {
 public:
-	Subway(int id_nearby, string codStop, string line) :
+	Subway(int id_nearby, std::string codStop, std::string line) :
 			TranspStop(id_nearby, codStop, line) {
 	}
 	;
@@ -46,8 +50,8 @@ public:
 class PublicTransp {
 
 public:
-	vector<Bus> bus;
-	vector<Subway> subway;
+	std::vector<Bus> bus;
+	std::vector<Subway> subway;
 };
 
 #endif

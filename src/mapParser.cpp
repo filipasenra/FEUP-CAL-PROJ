@@ -8,9 +8,7 @@
 #include <map>
 #include <iostream>
 
-map <unsigned int, unsigned int> order;
-
-void parseX_YFile(Graph<Spot> * graph, std::string X_YFile,
+void parseX_YFile(Graph * graph, std::string X_YFile,
 		std::string Lat_LongFile) {
 
 	ifstream file_X_Y;
@@ -70,15 +68,13 @@ void parseX_YFile(Graph<Spot> * graph, std::string X_YFile,
 
 		Spot spot(id, coordinates_x, coordinates_y, latitude, longitude);
 
-		order.insert(pair<unsigned int,unsigned int>(id, graph->getNumVertex()));
-
-		graph->addVertex(new Vertex<Spot>(spot));
+		graph->addVertex(spot);
 
 	}
 
 }
 
-void parseEdgesFile(Graph<Spot> * graph, std::string edgesFile) {
+void parseEdgesFile(Graph * graph, std::string edgesFile) {
 
 	ifstream file_edges;
 	file_edges.open(edgesFile);
@@ -95,7 +91,7 @@ void parseEdgesFile(Graph<Spot> * graph, std::string edgesFile) {
 	std::istringstream iss(line);
 	iss >> number_of_nodes;
 
-	vector<Vertex<Spot> *> vec = graph->getVertexSet();
+	vector<Vertex *> vec = graph->getVertexSet();
 
 	while (std::getline(file_edges, line) && number_of_nodes != 0) {
 		number_of_nodes--;
@@ -106,14 +102,11 @@ void parseEdgesFile(Graph<Spot> * graph, std::string edgesFile) {
 
 		double weight;
 
-		int index1 = order[id1];
-		int index2 = order[id2];
+		Vertex * a = graph->findVertex(Spot(id1));
+		Vertex * b = graph->findVertex(Spot(id2));
 
-		if (index1 == NULL || index2 == NULL)
+		if(a == NULL || b == NULL)
 			continue;
-
-		Vertex<Spot> * a = vec.at(index1);
-		Vertex<Spot> * b = vec.at(index2);
 
 		weight = sqrt(
 				pow(
@@ -129,7 +122,7 @@ void parseEdgesFile(Graph<Spot> * graph, std::string edgesFile) {
 
 }
 
-void parseBusFile(Graph<Spot> * graph, std::string busFile) {
+void parseBusFile(Graph * graph, std::string busFile) {
 
 	ifstream file_bus;
 	file_bus.open(busFile);
@@ -155,7 +148,7 @@ void parseBusFile(Graph<Spot> * graph, std::string busFile) {
 		//%s eats the comma %[^,\n] does not
 		sscanf(line.c_str(), "(%d, %[^,\n], %[^,\n], %[^,\n], %[^,\n], %[^,\n], %[^,\n], %[^,\n])", &id, codStop, codLine, NULL, NULL, NULL, NULL, NULL);
 
-		Vertex<Spot> * vertex = graph->findVertex(Spot(id));
+		Vertex * vertex = graph->findVertex(Spot(id));
 
 		if(vertex == NULL)
 			continue;
@@ -168,7 +161,7 @@ void parseBusFile(Graph<Spot> * graph, std::string busFile) {
 }
 
 
-void parseSubwayFile(Graph<Spot> * graph, std::string subwayFile){
+void parseSubwayFile(Graph * graph, std::string subwayFile){
 	ifstream file_subway;
 	file_subway.open(subwayFile);
 
@@ -202,7 +195,7 @@ void parseSubwayFile(Graph<Spot> * graph, std::string subwayFile){
 
 				linha = linhas[2];
 				linhas = linhas.substr(5, linhas.size());
-				Vertex<Spot> * vertex = graph->findVertex(Spot(id));
+				Vertex * vertex = graph->findVertex(Spot(id));
 
 				if(vertex == NULL)
 				continue;
@@ -215,11 +208,11 @@ void parseSubwayFile(Graph<Spot> * graph, std::string subwayFile){
 
 }
 
-Graph<Spot> parseMap(std::string X_YFile, std::string edgesFile,
+Graph parseMap(std::string X_YFile, std::string edgesFile,
 		std::string Lat_LongFile, std::string busFile /*,
 		 std::string tagsFile*/) {
 
-	Graph<Spot> graph;
+	Graph graph;
 
 	parseX_YFile(&graph, X_YFile, Lat_LongFile);
 

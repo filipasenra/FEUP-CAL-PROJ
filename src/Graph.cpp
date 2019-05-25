@@ -431,7 +431,6 @@ vector<Vertex *> Graph::connectingStations() {
 			Vertex * vertexToBeAnalized = vertexSet.at(i);
 
 			if (vertexToBeAnalized->getInfo() == vertex1->getInfo()) {
-				cout << "Same vertex first\n";
 				continue;
 			}
 
@@ -453,10 +452,6 @@ vector<Vertex *> Graph::connectingStations() {
 				weightFirst = weight;
 				vertex_first = vertexToBeAnalized;
 			}
-
-			cout << "first id: " << vertexToBeAnalized->getInfo().getId()
-					<< " weight " << weight << endl;
-
 		}
 
 		double weightSecond = INF;
@@ -467,7 +462,6 @@ vector<Vertex *> Graph::connectingStations() {
 			Vertex * vertexToBeAnalized = vertexSet.at(i);
 
 			if (vertexToBeAnalized->getInfo() == vertex2->getInfo()) {
-				cout << "Same vertex second\n";
 				continue;
 			}
 
@@ -489,15 +483,10 @@ vector<Vertex *> Graph::connectingStations() {
 				weightSecond = weight;
 				vertex_second = vertexToBeAnalized;
 			}
-
-			cout << "second id: " << vertexToBeAnalized->getInfo().getId()
-					<< " weight " << weight << endl;
-
 		}
 
 		if (weightFirst == INF && weightSecond == INF)
 		{
-			cout << "acabou!\n";
 			break;
 		}
 
@@ -507,19 +496,13 @@ vector<Vertex *> Graph::connectingStations() {
 			first.top()->path = vertex1;
 			first.top()->dist = weightFirst;
 			second.top()->visited = true;
-
-			cout << "id: " << first.top()->getInfo().getId() << " weight first" << weightFirst << endl;
 		} else {
 
 			second.push(vertex_second);
 			second.top()->path = vertex2;
 			second.top()->dist = weightSecond;
 			second.top()->visited = true;
-
-			cout << "id: " << second.top()->getInfo().getId() << " weight second" << weightSecond << endl;
 		}
-
-		cout << endl;
 
 	}
 

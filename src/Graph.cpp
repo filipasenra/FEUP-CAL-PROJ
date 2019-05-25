@@ -466,7 +466,9 @@ vector<Vertex *> Graph::connectingStations() {
 			}
 
 			if(vertexToBeAnalized->visited)
-				continue;
+				{
+					continue;
+				}
 
 			double weight =
 					sqrt(
@@ -487,16 +489,20 @@ vector<Vertex *> Graph::connectingStations() {
 
 		if (weightFirst == INF && weightSecond == INF)
 		{
-			break;
+			return mst;
 		}
 
 		if (weightFirst < weightSecond) {
 
+			first.pop();
+
 			first.push(vertex_first);
 			first.top()->path = vertex1;
 			first.top()->dist = weightFirst;
-			second.top()->visited = true;
+			first.top()->visited = true;
 		} else {
+
+			second.pop();
 
 			second.push(vertex_second);
 			second.top()->path = vertex2;

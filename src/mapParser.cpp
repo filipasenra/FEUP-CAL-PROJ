@@ -193,6 +193,8 @@ void parseBusFile(Graph * graph, std::string busFile) {
 	std::istringstream iss(line);
 	iss >> number_of_nodes;
 
+	set<string> bus_lines;
+
 	while (std::getline(file_bus, line) && number_of_nodes != 0) {
 		number_of_nodes--;
 
@@ -211,8 +213,11 @@ void parseBusFile(Graph * graph, std::string busFile) {
 
 		Bus bus(id, string(codStop), string(codLine));
 		vertex->getPointerInfo()->publicTransp.bus.push_back(bus);
+		bus_lines.insert(bus.line);
 
 	}
+
+	makeLinesBus(graph, bus_lines);
 
 }
 

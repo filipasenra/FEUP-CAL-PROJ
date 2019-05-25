@@ -9,6 +9,11 @@
 #define SRC_EDGE_H_
 
 
+enum TYPE_TRANSPORTATION{
+	BUS,
+	FOOT,
+	SUBWAY
+};
 
 class Vertex;
 
@@ -16,14 +21,17 @@ class Vertex;
 
 
 class Edge {
-	Vertex *orig; 	// Fp07
+	Vertex *orig;
 	Vertex * dest;      // destination vertex
-	bool selected; // Fp07
+	bool selected;
 
 	double weight;         // edge weight
 
+	TYPE_TRANSPORTATION type_transportation;
+
 public:
 	Edge(Vertex *o, Vertex *d, double w);
+	Edge(Vertex *o, Vertex *d, double w, TYPE_TRANSPORTATION tp);
 	friend class Graph ;
 	friend class Vertex ;
 	bool operator<(Edge edge) const;
@@ -32,6 +40,9 @@ public:
 	double getWeight() const;
 	Vertex * getOrig() const;
 	Vertex * getDest() const;
+	TYPE_TRANSPORTATION getType_transportation(){
+		return this->type_transportation;
+	}
 
 };
 

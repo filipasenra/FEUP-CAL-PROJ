@@ -7,6 +7,8 @@
 #include <math.h>
 #include <map>
 #include <iostream>
+#include <set>
+#include <algorithm>
 
 void parseX_YFile(Graph * graph, std::string X_YFile,
 		std::string Lat_LongFile) {
@@ -74,7 +76,8 @@ void parseX_YFile(Graph * graph, std::string X_YFile,
 
 }
 
-void parseEdgesFile(Graph * graph, std::string edgesFile) {
+void parseEdgesFile(Graph * graph, std::string edgesFile,
+		TYPE_TRANSPORTATION tp = FOOT) {
 
 	ifstream file_edges;
 	file_edges.open(edgesFile);
@@ -116,11 +119,61 @@ void parseEdgesFile(Graph * graph, std::string edgesFile) {
 								a->getInfo().getCoordinates_y()
 										- b->getInfo().getCoordinates_y(), 2));
 
-		a->addEdge(b, weight);
-		b->addEdge(a, weight);
+		a->addEdge(b, weight, tp);
+		b->addEdge(a, weight, tp);
 
 	}
 
+}
+
+void makeLinesBus(Graph * graph, set<string> bus) {
+
+	vector<Vertex *> vec = graph->getVertexSet();
+	set<string>::iterator it = bus.begin();
+
+	for (set<string>::const_iterator it = bus.begin(); it != bus.end(); it++) {
+
+		Graph graph_line;
+
+		string line = *it;
+
+		for (unsigned int i = 0; i < vec.size(); i++) {
+
+			vector<Bus> bus = vec.at(i)->getInfo().publicTransp.bus;
+
+			for (unsigned int k = 0; k < bus.size(); k++) {
+				if (bus.at(k).line == line) {
+					graph_line.addVertex(vec.at(i)->getInfo());
+					break;
+				}
+			}
+		}
+
+
+		graph_line.connectingStations();
+
+		vector<Vertex *> vec2 = graph_line.getVertexSet();
+
+		for(unsigned int k = 0; k < vec2.size(); k++){
+
+			Vertex * vertex1 = graph->findVertex(vec2.at(k)->getInfo());
+
+			if(vec2.at(k)->path != nullptr){
+				Vertex * vertex2 = graph->findVertex(vec2.at(k)->path->getInfo());
+
+				double weight = sqrt(
+							pow(
+									vertex1->getInfo().getCoordinates_x()
+											- vertex2->getInfo().getCoordinates_x(), 2)
+									+ pow(
+											vertex1->getInfo().getCoordinates_y()
+													- vertex2->getInfo().getCoordinates_y(), 2));
+
+				vertex1->addEdge(vertex2, weight, BUS);
+				vertex2->addEdge(vertex1, weight, BUS);
+			}
+		}
+	}
 }
 
 void parseBusFile(Graph * graph, std::string busFile) {
@@ -163,6 +216,56 @@ void parseBusFile(Graph * graph, std::string busFile) {
 
 }
 
+void makeLinesSubway(Graph * graph, set<string> subwayLines) {
+
+	vector<Vertex *> vec = graph->getVertexSet();
+	set<string>::iterator it = subwayLines.begin();
+
+	for (set<string>::const_iterator it = subwayLines.begin(); it != subwayLines.end(); it++) {
+
+		Graph graph_line;
+
+		string line = *it;
+
+		for (unsigned int i = 0; i < vec.size(); i++) {
+
+			vector<Subway> subway = vec.at(i)->getInfo().publicTransp.subway;
+
+			for (unsigned int k = 0; k < subway.size(); k++) {
+				if (subway.at(k).line == line) {
+					graph_line.addVertex(vec.at(i)->getInfo());
+					break;
+				}
+			}
+		}
+
+
+		graph_line.connectingStations();
+
+		vector<Vertex *> vec2 = graph_line.getVertexSet();
+
+		for(unsigned int k = 0; k < vec2.size(); k++){
+
+			Vertex * vertex1 = graph->findVertex(vec2.at(k)->getInfo());
+
+			if(vec2.at(k)->path != nullptr){
+				Vertex * vertex2 = graph->findVertex(vec2.at(k)->path->getInfo());
+
+				double weight = sqrt(
+							pow(
+									vertex1->getInfo().getCoordinates_x()
+											- vertex2->getInfo().getCoordinates_x(), 2)
+									+ pow(
+											vertex1->getInfo().getCoordinates_y()
+													- vertex2->getInfo().getCoordinates_y(), 2));
+
+				vertex1->addEdge(vertex2, weight, SUBWAY);
+				vertex2->addEdge(vertex1, weight, SUBWAY);
+			}
+		}
+	}
+}
+
 void parseSubwayFile(Graph * graph, std::string subwayFile) {
 	ifstream file_subway;
 	file_subway.open(subwayFile);
@@ -178,6 +281,8 @@ void parseSubwayFile(Graph * graph, std::string subwayFile) {
 	std::getline(file_subway, line);
 	std::istringstream iss(line);
 	iss >> number_of_nodes;
+
+	set<string> subwayLines;
 
 	while (std::getline(file_subway, line) && number_of_nodes != 0) {
 		number_of_nodes--;
@@ -206,10 +311,13 @@ void parseSubwayFile(Graph * graph, std::string subwayFile) {
 				Subway subway(id, nome, linha);
 
 				vertex->getPointerInfo()->publicTransp.subway.push_back(subway);
+				subwayLines.insert(subway.line);
 			}
 		}
 
 	}
+
+	makeLinesSubway(graph, subwayLines);
 
 }
 

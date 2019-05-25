@@ -10,6 +10,12 @@
 
 Edge::Edge(Vertex *o, Vertex *d, double w) :
 		orig(o), dest(d), weight(w) {
+
+	this->type_transportation = FOOT;
+}
+
+Edge::Edge(Vertex *o, Vertex *d, double w, TYPE_TRANSPORTATION tp): orig(o), dest(d), weight(w), type_transportation(tp){
+
 }
 
 

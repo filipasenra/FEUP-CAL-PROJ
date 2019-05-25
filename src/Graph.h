@@ -51,7 +51,8 @@ public:
 	void bfs(Spot & origin);
 	void visitDFS(Vertex * vertex);
 	bool isPathPossible(const Spot & origin, const Spot & end);
-
+	vector<Vertex *> connectingStations();
+	bool relaxPrim(Vertex *v, Vertex *w);
 
 	void dijkstraShortestPath(const Spot &s, const Spot &d);
 	vector<Spot> getPath(const Spot &origin, const Spot &dest) const;

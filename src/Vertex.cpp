@@ -18,9 +18,9 @@ Vertex::Vertex(Spot in) :
  * with a given destination vertex (d) and edge weight (w).
  */
 
-void Vertex::addEdge(Vertex *d, double w) {
+void Vertex::addEdge(Vertex *d, double w,  TYPE_TRANSPORTATION tp) {
 
-	adj.push_back(Edge(this, d, w));
+	adj.push_back(Edge(this, d, w, tp));
 }
 
 

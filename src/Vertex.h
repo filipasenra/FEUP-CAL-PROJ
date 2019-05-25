@@ -30,7 +30,7 @@ public:
 	double dist = 0;
 
 	Vertex(Spot in);
-	void addEdge(Vertex *dest, double w);
+	void addEdge(Vertex *dest, double w, TYPE_TRANSPORTATION tp);
 	bool operator<(Vertex & vertex) const; // // required by MutablePriorityQueue
 	Spot getInfo() const;
 	Spot* getPointerInfo() {

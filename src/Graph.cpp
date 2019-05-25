@@ -10,6 +10,8 @@
 #define VELOCITY_FOOT 40//(km/h)
 
 #include "Graph.h"
+#include "Math.h"
+#include "Stack"
 
 int Graph::getNumVertex() const {
 	return vertexSet.size();
@@ -88,7 +90,7 @@ bool Graph::addEdge(const Spot &sourc, const Spot &dest, double w) {
 	auto v2 = findVertex(dest);
 	if (v1 == nullptr || v2 == nullptr)
 		return false;
-	v1->addEdge(v2, w);
+	v1->addEdge(v2, w, FOOT);
 	return true;
 }
 
@@ -217,6 +219,8 @@ Graph Graph::getPathGraph(const Spot &origin, const Spot &dest) const {
 					{
 						graph.addEdge(old->getInfo(), v->getInfo(),
 								v->adj.at(i).getWeight());
+						graph.addEdge(v->getInfo(), old->getInfo(),
+								v->adj.at(i).getWeight());
 						break;
 					}
 				}
@@ -307,7 +311,7 @@ bool Graph::isPathPossible(const Spot & origin, const Spot & end) {
 
 		for (unsigned int i = 0; i < edjes.size(); i++) {
 
-			if(edjes.at(i).dest->getInfo() == end)
+			if (edjes.at(i).dest->getInfo() == end)
 				return true;
 
 			if (edjes.at(i).dest->visited)
@@ -316,11 +320,6 @@ bool Graph::isPathPossible(const Spot & origin, const Spot & end) {
 			edjes.at(i).dest->visited = true;
 			q.insert(edjes.at(i).dest);
 		}
-
-		if(q.empty())
-		cout << "empty\n";
-		else
-			cout << "not emplty\n";
 
 	}
 
@@ -374,15 +373,158 @@ void Graph::dijkstraFastestPath(const Spot & origin, const Spot & end) {
 
 }
 
-/**************** All Pairs Shortest Path  ***************/
+bool Graph::relaxPrim(Vertex *v, Vertex *w) {
 
-void deleteMatrix(Spot **m, int n) {
-	if (m != nullptr) {
-		for (int i = 0; i < n; i++)
-			if (m[i] != nullptr)
-				delete[] m[i];
-		delete[] m;
+	double weight = sqrt(
+			pow(
+					v->getInfo().getCoordinates_x()
+							- w->getInfo().getCoordinates_x(), 2)
+					+ pow(
+							v->getInfo().getCoordinates_y()
+									- w->getInfo().getCoordinates_y(), 2));
+
+	if (v->dist + weight < w->dist) {
+		{
+			w->dist = v->dist + weight;
+			w->path = v;
+
+			cout << v->getInfo().getId() << " " << w->getInfo().getId() << endl;
+
+			return true;
+		}
+	} else {
+		return false;
 	}
+}
+
+vector<Vertex *> Graph::connectingStations() {
+
+	vector<Vertex *> mst;
+
+	if (this->getNumVertex() == 0)
+		return mst;
+
+	for (auto v : vertexSet) {
+		v->dist = INF;
+		v->path = nullptr;
+		v->visited = false;
+	}
+
+	Vertex * s = this->vertexSet.at(0);
+	s->visited = true;
+
+	stack<Vertex *> first;
+	first.push(s);
+	stack<Vertex *> second;
+	second.push(s);
+
+	while (!first.empty() && !second.empty()) {
+
+		Vertex * vertex1 = first.top();
+		Vertex * vertex2 = second.top();
+
+		double weightFirst = INF;
+		Vertex * vertex_first;
+
+		for (unsigned int i = 0; i < vertexSet.size(); i++) {
+
+			Vertex * vertexToBeAnalized = vertexSet.at(i);
+
+			if (vertexToBeAnalized->getInfo() == vertex1->getInfo()) {
+				cout << "Same vertex first\n";
+				continue;
+			}
+
+			if(vertexToBeAnalized->visited)
+				continue;
+
+			double weight =
+					sqrt(
+							pow(
+									vertex1->getInfo().getCoordinates_x()
+											- vertexToBeAnalized->getInfo().getCoordinates_x(),
+									2)
+									+ pow(
+											vertex1->getInfo().getCoordinates_y()
+													- vertexToBeAnalized->getInfo().getCoordinates_y(),
+											2));
+
+			if (weight < weightFirst) {
+				weightFirst = weight;
+				vertex_first = vertexToBeAnalized;
+			}
+
+			cout << "first id: " << vertexToBeAnalized->getInfo().getId()
+					<< " weight " << weight << endl;
+
+		}
+
+		double weightSecond = INF;
+		Vertex * vertex_second;
+
+		for (unsigned int i = 0; i < vertexSet.size(); i++) {
+
+			Vertex * vertexToBeAnalized = vertexSet.at(i);
+
+			if (vertexToBeAnalized->getInfo() == vertex2->getInfo()) {
+				cout << "Same vertex second\n";
+				continue;
+			}
+
+			if(vertexToBeAnalized->visited)
+				continue;
+
+			double weight =
+					sqrt(
+							pow(
+									vertex2->getInfo().getCoordinates_x()
+											- vertexToBeAnalized->getInfo().getCoordinates_x(),
+									2)
+									+ pow(
+											vertex2->getInfo().getCoordinates_y()
+													- vertexToBeAnalized->getInfo().getCoordinates_y(),
+											2));
+
+			if (weight < weightSecond) {
+				weightSecond = weight;
+				vertex_second = vertexToBeAnalized;
+			}
+
+			cout << "second id: " << vertexToBeAnalized->getInfo().getId()
+					<< " weight " << weight << endl;
+
+		}
+
+		if (weightFirst == INF && weightSecond == INF)
+		{
+			cout << "acabou!\n";
+			break;
+		}
+
+		if (weightFirst < weightSecond) {
+
+			first.push(vertex_first);
+			first.top()->path = vertex1;
+			first.top()->dist = weightFirst;
+			second.top()->visited = true;
+
+			cout << "id: " << first.top()->getInfo().getId() << " weight first" << weightFirst << endl;
+		} else {
+
+			second.push(vertex_second);
+			second.top()->path = vertex2;
+			second.top()->dist = weightSecond;
+			second.top()->visited = true;
+
+			cout << "id: " << second.top()->getInfo().getId() << " weight second" << weightSecond << endl;
+		}
+
+		cout << endl;
+
+	}
+
+	return mst;
+
 }
 
 Graph::~Graph() {

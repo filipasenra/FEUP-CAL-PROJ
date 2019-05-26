@@ -15,6 +15,9 @@
 
 using namespace std;
 menu::menu() {
+
+	cout << "Loading Map..." << endl;
+
 	this->graph = parseMap("T11_nodes_X_Y_Porto.txt", "T11_edges_Porto.txt",
 			"T11_nodes_lat_lon_Porto.txt", "stcp_routes_Porto.txt", "metro_routes_Porto.txt");
 
@@ -177,6 +180,8 @@ void menu::showMapSchedule() {
 
 	Graph graphPath;
 
+	double weight = 0;
+
 	for (size_t i = 1; i < this->schedule.size(); i++) {
 		Graph new_graph;
 
@@ -188,6 +193,8 @@ void menu::showMapSchedule() {
 		graph.dijkstraShortestPath(schedule.at(i - 1).getSpot(),
 				schedule.at(i).getSpot());
 
+		weight += graph.findVertex(schedule.at(i).getSpot())->dist;
+
 		new_graph = graph.getPathGraph(schedule.at(i - 1).getSpot(),
 				schedule.at(i).getSpot());
 
@@ -195,7 +202,9 @@ void menu::showMapSchedule() {
 	}
 
 	if (graphPath.getNumVertex() != 0) {
-		drawGraph(graphPath, 1500, 1000);
+		drawGraph(graph, 1500, 1000);
+
+		cout << "The total weight of the trip is: " << weight << "." << endl;
 		getchar();
 	} else
 		cout << "No path found!\n";

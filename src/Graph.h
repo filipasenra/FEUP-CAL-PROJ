@@ -38,7 +38,7 @@ public:
 	Vertex *findVertex(const Spot &in) const;
 	bool addVertex(const Spot &in);
 	bool addVertex(Vertex * new_vertex);
-	bool addEdge(const Spot &sourc, const Spot &dest, double w);
+	bool addEdge(const Spot &sourc, const Spot &dest, double w, TYPE_TRANSPORTATION type = FOOT);
 	int getNumVertex() const;
 	vector<Vertex *> getVertexSet() const;
 

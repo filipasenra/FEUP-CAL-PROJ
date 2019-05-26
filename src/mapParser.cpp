@@ -9,6 +9,7 @@
 #include <iostream>
 #include <set>
 #include <algorithm>
+#include "Utilities.h"
 
 void parseX_YFile(Graph * graph, std::string X_YFile,
 		std::string Lat_LongFile) {
@@ -111,13 +112,7 @@ void parseEdgesFile(Graph * graph, std::string edgesFile,
 		if (a == NULL || b == NULL)
 			continue;
 
-		weight = sqrt(
-				pow(
-						a->getInfo().getCoordinates_x()
-								- b->getInfo().getCoordinates_x(), 2)
-						+ pow(
-								a->getInfo().getCoordinates_y()
-										- b->getInfo().getCoordinates_y(), 2));
+		weight = distanceCoordinates(a->getInfo(), b->getInfo());
 
 		a->addEdge(b, weight, tp);
 		b->addEdge(a, weight, tp);
@@ -161,13 +156,7 @@ void makeLinesBus(Graph * graph, set<string> bus) {
 			if(vec2.at(k)->path != nullptr){
 				Vertex * vertex2 = graph->findVertex(vec2.at(k)->path->getInfo());
 
-				double weight = sqrt(
-							pow(
-									vertex1->getInfo().getCoordinates_x()
-											- vertex2->getInfo().getCoordinates_x(), 2)
-									+ pow(
-											vertex1->getInfo().getCoordinates_y()
-													- vertex2->getInfo().getCoordinates_y(), 2));
+				double weight = distanceCoordinates(vertex1->getInfo(), vertex2->getInfo());
 
 				vertex1->addEdge(vertex2, weight, BUS);
 				vertex2->addEdge(vertex1, weight, BUS);
@@ -256,13 +245,7 @@ void makeLinesSubway(Graph * graph, set<string> subwayLines) {
 			if(vec2.at(k)->path != nullptr){
 				Vertex * vertex2 = graph->findVertex(vec2.at(k)->path->getInfo());
 
-				double weight = sqrt(
-							pow(
-									vertex1->getInfo().getCoordinates_x()
-											- vertex2->getInfo().getCoordinates_x(), 2)
-									+ pow(
-											vertex1->getInfo().getCoordinates_y()
-													- vertex2->getInfo().getCoordinates_y(), 2));
+				double weight = distanceCoordinates(vertex1->getInfo(), vertex2->getInfo());
 
 				vertex1->addEdge(vertex2, weight, SUBWAY);
 				vertex2->addEdge(vertex1, weight, SUBWAY);

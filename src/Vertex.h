@@ -22,7 +22,7 @@ class Vertex {
 	std::vector<Vertex*> disjSet;
 
 public:
-
+	bool part_of_path = false;
 
 	Vertex *path = nullptr;
 	std::vector<Edge > adj;  // outgoing edges

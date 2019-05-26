@@ -12,6 +12,8 @@
 #include "Graph.h"
 #include "Math.h"
 #include "Stack"
+#include "Utilities.h"
+#include <sstream>
 
 int Graph::getNumVertex() const {
 	return vertexSet.size();
@@ -85,12 +87,13 @@ bool Graph::addVertex(Vertex * new_vertex) {
  * Returns true if successful, and false if the source or destination vertex does not exist.
  */
 
-bool Graph::addEdge(const Spot &sourc, const Spot &dest, double w) {
+bool Graph::addEdge(const Spot &sourc, const Spot &dest, double w,
+		TYPE_TRANSPORTATION type) {
 	auto v1 = findVertex(sourc);
 	auto v2 = findVertex(dest);
 	if (v1 == nullptr || v2 == nullptr)
 		return false;
-	v1->addEdge(v2, w, FOOT);
+	v1->addEdge(v2, w, type);
 	return true;
 }
 
@@ -185,9 +188,12 @@ void Graph::dijkstraShortestPath(const Spot &origin, const Spot &end) {
 		}
 
 		for (auto e : v->adj) {
+
 			auto oldDist = e.dest->dist;
 
 			if (relax(v, e.dest, e.weight)) {
+
+				cout << e.dest << endl;
 				if (oldDist == INF)
 				q.insert(e.dest);
 				else
@@ -225,6 +231,8 @@ Graph Graph::getPathGraph(const Spot &origin, const Spot &dest) const {
 
 	for (; v != nullptr; v = v->path) {
 
+		v->part_of_path = true;
+
 		graph.addVertex(v->getInfo());
 
 		//Adding edge to new graph!!
@@ -236,10 +244,14 @@ Graph Graph::getPathGraph(const Spot &origin, const Spot &dest) const {
 				if (v->adj.at(i).getDest()->getInfo().getId()
 						== old->getInfo().getId()) {
 					{
+						v->adj.at(i).part_of_path = true;
+
 						graph.addEdge(old->getInfo(), v->getInfo(),
-								v->adj.at(i).getWeight());
+								v->adj.at(i).getWeight(),
+								v->adj.at(i).type_transportation);
 						graph.addEdge(v->getInfo(), old->getInfo(),
-								v->adj.at(i).getWeight());
+								v->adj.at(i).getWeight(),
+								v->adj.at(i).type_transportation);
 						break;
 					}
 				}
@@ -394,20 +406,12 @@ void Graph::dijkstraFastestPath(const Spot & origin, const Spot & end) {
 
 bool Graph::relaxPrim(Vertex *v, Vertex *w) {
 
-	double weight = sqrt(
-			pow(
-					v->getInfo().getCoordinates_x()
-							- w->getInfo().getCoordinates_x(), 2)
-					+ pow(
-							v->getInfo().getCoordinates_y()
-									- w->getInfo().getCoordinates_y(), 2));
+	double weight = distanceCoordinates(v->getInfo(), w->getInfo());
 
 	if (v->dist + weight < w->dist) {
 		{
 			w->dist = v->dist + weight;
 			w->path = v;
-
-			cout << v->getInfo().getId() << " " << w->getInfo().getId() << endl;
 
 			return true;
 		}
@@ -456,16 +460,8 @@ vector<Vertex *> Graph::connectingStations() {
 			if (vertexToBeAnalized->visited)
 				continue;
 
-			double weight =
-					sqrt(
-							pow(
-									vertex1->getInfo().getCoordinates_x()
-											- vertexToBeAnalized->getInfo().getCoordinates_x(),
-									2)
-									+ pow(
-											vertex1->getInfo().getCoordinates_y()
-													- vertexToBeAnalized->getInfo().getCoordinates_y(),
-											2));
+			double weight = distanceCoordinates(vertex1->getInfo(),
+					vertexToBeAnalized->getInfo());
 
 			if (weight < weightFirst) {
 				weightFirst = weight;
@@ -488,16 +484,8 @@ vector<Vertex *> Graph::connectingStations() {
 				continue;
 			}
 
-			double weight =
-					sqrt(
-							pow(
-									vertex2->getInfo().getCoordinates_x()
-											- vertexToBeAnalized->getInfo().getCoordinates_x(),
-									2)
-									+ pow(
-											vertex2->getInfo().getCoordinates_y()
-													- vertexToBeAnalized->getInfo().getCoordinates_y(),
-											2));
+			double weight = distanceCoordinates(vertex2->getInfo(),
+					vertexToBeAnalized->getInfo());
 
 			if (weight < weightSecond) {
 				weightSecond = weight;
@@ -535,7 +523,5 @@ vector<Vertex *> Graph::connectingStations() {
 }
 
 Graph::~Graph() {
-//deleteMatrix(W, vertexSet.size());
-//deleteMatrix(P, vertexSet.size());
 }
 

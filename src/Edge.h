@@ -29,7 +29,10 @@ class Edge {
 
 	TYPE_TRANSPORTATION type_transportation;
 
+
 public:
+	bool part_of_path = false;
+
 	Edge(Vertex *o, Vertex *d, double w);
 	Edge(Vertex *o, Vertex *d, double w, TYPE_TRANSPORTATION tp);
 	friend class Graph ;

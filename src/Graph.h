@@ -26,9 +26,9 @@ using namespace std;
 
 
 class Graph {
+
+protected:
 	vector<Vertex *> vertexSet;    // vertex set
-
-
 	map <unsigned int, unsigned int> order; //look up table
 
 public:
@@ -41,11 +41,16 @@ public:
 	bool addEdge(const Spot &sourc, const Spot &dest, double w);
 	int getNumVertex() const;
 	vector<Vertex *> getVertexSet() const;
+
+	map <unsigned int, unsigned int> getOrder(){
+		return this->order;
+	};
 	Graph getPathGraph(const Spot &origin, const Spot &dest) const;
 
 
 	Vertex * initSingleSource(const Spot &orig);
 	bool relax(Vertex *v, Vertex *w, double weight);
+	bool relaxFastest(Vertex *v, Vertex *w, double weight);
 	int findVertexIdx(const Spot &in) const;
 	void dfs(Spot & origin);
 	void bfs(Spot & origin);

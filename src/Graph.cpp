@@ -127,6 +127,24 @@ inline bool Graph::relax(Vertex *v, Vertex *w, double weight) {
 		return false;
 }
 
+bool Graph::relaxFastest(Vertex *v, Vertex *w, double weight) {
+
+	if (v->getInfo().hasSameSubWayStation(w->getInfo())) {
+		weight /= VELOCITY_SUBWAY;
+	} else if (v->getInfo().hasSameBusStation(w->getInfo())) {
+		weight /= VELOCITY_BUS;
+	} else {
+		weight /= VELOCITY_FOOT;
+	}
+
+	if (v->dist + weight < w->dist) {
+		w->dist = v->dist + weight;
+		w->path = v;
+		return true;
+	} else
+		return false;
+}
+
 /**
  * Resets the nodes
  */
@@ -162,8 +180,9 @@ void Graph::dijkstraShortestPath(const Spot &origin, const Spot &end) {
 		auto v = q.extractMin();
 
 		//Has it arrived at the end of the path?
-		if (v->info == end)
+		if (v->info == end) {
 			return;
+		}
 
 		for (auto e : v->adj) {
 			auto oldDist = e.dest->dist;
@@ -434,7 +453,7 @@ vector<Vertex *> Graph::connectingStations() {
 				continue;
 			}
 
-			if(vertexToBeAnalized->visited)
+			if (vertexToBeAnalized->visited)
 				continue;
 
 			double weight =
@@ -465,10 +484,9 @@ vector<Vertex *> Graph::connectingStations() {
 				continue;
 			}
 
-			if(vertexToBeAnalized->visited)
-				{
-					continue;
-				}
+			if (vertexToBeAnalized->visited) {
+				continue;
+			}
 
 			double weight =
 					sqrt(
@@ -487,7 +505,7 @@ vector<Vertex *> Graph::connectingStations() {
 			}
 		}
 
-		if (weightFirst == INF && weightSecond == INF)
+		if (weightFirst == INF&& weightSecond == INF)
 		{
 			return mst;
 		}

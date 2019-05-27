@@ -34,7 +34,7 @@ public:
 
 	void bidirectionaldijsktra(Spot origin, Spot final);
 	void bidirectionaldijsktrafastest(Spot o, Spot f);
-	Graph getPathGraphBi();
+	void getPathGraphBi();
 	double getTotalWeight(){
 		return TotalWeight;
 	};

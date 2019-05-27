@@ -152,6 +152,7 @@ int drawPath(Graph graph, int width, int height) {
 			gv->setVertexColor(info.getId(), GREEN);
 			continue;
 		} else if (vec.at(i)->part_of_path) {
+
 			gv->setVertexSize(info.getId(), 40);
 			gv->setVertexColor(info.getId(), RED);
 			continue;

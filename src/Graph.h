@@ -45,7 +45,7 @@ public:
 	map <unsigned int, unsigned int> getOrder(){
 		return this->order;
 	};
-	Graph getPathGraph(const Spot &origin, const Spot &dest) const;
+	void getPathGraph(const Spot &origin, const Spot &dest) const;
 
 
 	Vertex * initSingleSource(const Spot &orig);

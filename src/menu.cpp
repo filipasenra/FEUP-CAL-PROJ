@@ -184,6 +184,7 @@ void menu::showMapSchedule() {
 	double weight = 0;
 
 	graph.resetPath();
+	Graph graph2;
 
 	for (size_t i = 1; i < this->schedule.size(); i++) {
 		Graph new_graph;
@@ -193,13 +194,22 @@ void menu::showMapSchedule() {
 			continue;
 		}
 
-		graph.dijkstraFastestPath(schedule.at(i - 1).getSpot(),
+		BiDirectionalDijsktra bid(graph);
+
+		bid.bidirectionaldijsktrafastest(schedule.at(i - 1).getSpot(),
+				schedule.at(i).getSpot());
+
+		weight += bid.getTotalWeight();
+
+		bid.getPathGraphBi();
+
+		/*graph.dijkstraFastestPath(schedule.at(i - 1).getSpot(),
 				schedule.at(i).getSpot());
 
 		weight += graph.findVertex(schedule.at(i).getSpot())->dist;
 
 		graph.getPathGraph(schedule.at(i - 1).getSpot(),
-				schedule.at(i).getSpot());
+				schedule.at(i).getSpot());*/
 	}
 
 	if (weight < INF) {

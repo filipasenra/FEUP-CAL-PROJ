@@ -1,5 +1,7 @@
 #include "BiDirectionalDijkstra.h"
 
+#include "Draw.h"
+
 void invertingGraph(Graph * original, Graph * final) {
 
 	vector<Vertex *> vec = original->getVertexSet();
@@ -35,7 +37,11 @@ void addingGraph(Graph * source, Graph * to_be_added) {
 
 		Vertex * invertedVertex = vec.at(i);
 
-		source->addVertex(invertedVertex->getInfo());
+		if(invertedVertex->part_of_path)
+			source->findVertex(invertedVertex->getInfo())->part_of_path = true;
+
+		if(invertedVertex->start_of_path)
+			source->findVertex(invertedVertex->getInfo())->start_of_path = true;
 	}
 
 	for (unsigned int i = 0; i < vec.size(); i++) {
@@ -44,8 +50,24 @@ void addingGraph(Graph * source, Graph * to_be_added) {
 		vector<Edge> edjes = vertex->getEdjes();
 
 		for (unsigned int j = 0; j < edjes.size(); j++) {
-			source->addEdge(vertex->getInfo(), edjes.at(j).getDest()->getInfo(),
-					edjes.at(j).getWeight());
+
+			//Checks if edje is part of the path
+			if(!edjes.at(j).part_of_path)
+				continue;
+
+			//If it is than lets find it's opositive and transform it into a path edje
+
+			//Vertex of origin in original graph
+			Vertex * vertexOposite = source->findVertex(edjes.at(j).getDest()->getInfo());
+
+			for(unsigned int k = 0; k < vertexOposite->adj.size(); k++){
+
+				if(vertexOposite->adj.at(k).getDest()->getInfo() == vertex->getInfo())
+				{
+					vertexOposite->adj.at(k).part_of_path = true;
+					break;
+				}
+			}
 		}
 	}
 
@@ -146,19 +168,12 @@ void BiDirectionalDijsktra::bidirectionaldijsktra(Spot o, Spot f) {
 
 }
 
-Graph BiDirectionalDijsktra::getPathGraphBi() {
+void BiDirectionalDijsktra::getPathGraphBi() {
 
-	Graph graph1_after = this->getPathGraph(origin, spotFinish);
-	Graph graph2_after = invertedGraph.getPathGraph(final, spotFinish);
+	this->getPathGraph(origin, spotFinish);
+	invertedGraph.getPathGraph(final, spotFinish);
 
-	Graph graph2_after_dir;
-
-	invertingGraph(&(graph2_after), &(graph2_after_dir));
-
-	//adding graph2 to 1
-	addingGraph(&graph1_after, &graph2_after_dir);
-
-	return graph1_after;
+	addingGraph(this, &invertedGraph);
 
 }
 

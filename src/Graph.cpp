@@ -177,7 +177,7 @@ void Graph::resetPath() const {
 		vertexSet.at(i)->part_of_path = false;
 		vertexSet.at(i)->start_of_path = false;
 
-		for(unsigned int j = 0; j < vertexSet.at(i)->getEdjes().size(); j++){
+		for (unsigned int j = 0; j < vertexSet.at(i)->getEdjes().size(); j++) {
 			vertexSet.at(i)->getEdjes().at(j).part_of_path = false;
 		}
 
@@ -231,15 +231,12 @@ vector<Spot> Graph::getPath(const Spot &origin, const Spot &dest) const {
 	return res;
 }
 
-Graph Graph::getPathGraph(const Spot &origin, const Spot &dest) const {
+void Graph::getPathGraph(const Spot &origin, const Spot &dest) const {
 
-	Graph graph;
-
-	vector<Spot> res;
 	auto v = findVertex(dest);
 
 	if (v == nullptr || v->dist == INF) // missing or disconnected
-	return graph;
+	return;
 
 	Vertex *old = nullptr;
 	v->start_of_path = true;
@@ -247,7 +244,6 @@ Graph Graph::getPathGraph(const Spot &origin, const Spot &dest) const {
 	for (; v != nullptr; v = v->path) {
 
 		v->part_of_path = true;
-		graph.addVertex(v->getInfo());
 
 		//Adding edge to new graph!!
 		if (old != nullptr) {
@@ -259,10 +255,6 @@ Graph Graph::getPathGraph(const Spot &origin, const Spot &dest) const {
 						== old->getInfo().getId()) {
 					{
 						v->adj.at(i).part_of_path = true;
-
-						graph.addEdge(old->getInfo(), v->getInfo(),
-								v->adj.at(i).getWeight(),
-								v->adj.at(i).type_transportation);
 						break;
 					}
 				}
@@ -275,7 +267,7 @@ Graph Graph::getPathGraph(const Spot &origin, const Spot &dest) const {
 			v->start_of_path = true;
 	}
 
-	return graph;
+	return;
 }
 
 void Graph::visitDFS(Vertex * vertex) {

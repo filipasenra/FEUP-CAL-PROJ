@@ -187,7 +187,6 @@ void menu::showMapSchedule() {
 	Graph graph2;
 
 	for (size_t i = 1; i < this->schedule.size(); i++) {
-		Graph new_graph;
 
 		if (!graph.isPathPossible(schedule.at(i - 1).getSpot(), schedule.at(i).getSpot())) {
 			cout << "Path is not possible between " << schedule.at(i - 1).getSpot().getId() << " and " << schedule.at(i).getSpot().getId() << "!\n";
@@ -196,14 +195,14 @@ void menu::showMapSchedule() {
 
 		BiDirectionalDijsktra bid(graph);
 
-		bid.bidirectionaldijsktrafastest(schedule.at(i - 1).getSpot(),
+		bid.bidirectionalAStar(schedule.at(i - 1).getSpot(),
 				schedule.at(i).getSpot());
 
 		weight += bid.getTotalWeight();
 
 		bid.getPathGraphBi();
 
-		/*graph.dijkstraFastestPath(schedule.at(i - 1).getSpot(),
+		/*graph.AStar(schedule.at(i - 1).getSpot(),
 				schedule.at(i).getSpot());
 
 		weight += graph.findVertex(schedule.at(i).getSpot())->dist;

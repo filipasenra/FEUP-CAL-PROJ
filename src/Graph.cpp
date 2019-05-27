@@ -162,7 +162,6 @@ void Graph::ResetNodes() {
 	for (unsigned int i = 0; i < this->vertexSet.size(); i++) {
 		vertexSet.at(i)->visited = false;
 		vertexSet.at(i)->path = nullptr;
-		vertexSet.at(i)->disjSet.clear();
 		vertexSet.at(i)->dist = INF;
 		vertexSet.at(i)->queueIndex = 0;
 
@@ -381,6 +380,7 @@ void Graph::dijkstraFastestPath(const Spot & origin, const Spot & end) {
 			return;
 
 		for (auto e : v->adj) {
+
 			auto oldDist = e.getDest()->dist;
 
 			if (relaxFastest(v, e.dest, e.weight)) {
@@ -395,6 +395,16 @@ void Graph::dijkstraFastestPath(const Spot & origin, const Spot & end) {
 	}
 
 	this->nodesReset = false;
+
+}
+
+void Graph::AStar(const Spot &s, const Spot &d) {
+
+	for (unsigned int i = 0; i < this->vertexSet.size(); i++) {
+		vertexSet.at(i)->distToSource = distanceCoordinates(vertexSet.at(i)->getInfo(), d);
+	}
+
+	dijkstraFastestPath(s, d);
 
 }
 

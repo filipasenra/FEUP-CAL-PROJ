@@ -19,7 +19,6 @@ class Vertex {
 	Spot info;                // contents
 
 	int queueIndex = 0; 		// required by MutablePriorityQueue
-	std::vector<Vertex*> disjSet;
 
 public:
 	bool part_of_path = false;
@@ -29,6 +28,7 @@ public:
 	std::vector<Edge > adj;  // outgoing edges
 	bool visited = false;          // auxiliary field
 	double dist = 0;
+	double distToSource = -1;
 
 	Vertex(Spot in);
 	void addEdge(Vertex *dest, double w, TYPE_TRANSPORTATION tp);

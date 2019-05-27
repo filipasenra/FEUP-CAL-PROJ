@@ -1,6 +1,7 @@
 #include "BiDirectionalDijkstra.h"
 
 #include "Draw.h"
+#include "Utilities.h"
 
 void invertingGraph(Graph * original, Graph * final) {
 
@@ -37,10 +38,10 @@ void addingGraph(Graph * source, Graph * to_be_added) {
 
 		Vertex * invertedVertex = vec.at(i);
 
-		if(invertedVertex->part_of_path)
+		if (invertedVertex->part_of_path)
 			source->findVertex(invertedVertex->getInfo())->part_of_path = true;
 
-		if(invertedVertex->start_of_path)
+		if (invertedVertex->start_of_path)
 			source->findVertex(invertedVertex->getInfo())->start_of_path = true;
 	}
 
@@ -52,18 +53,19 @@ void addingGraph(Graph * source, Graph * to_be_added) {
 		for (unsigned int j = 0; j < edjes.size(); j++) {
 
 			//Checks if edje is part of the path
-			if(!edjes.at(j).part_of_path)
+			if (!edjes.at(j).part_of_path)
 				continue;
 
 			//If it is than lets find it's opositive and transform it into a path edje
 
 			//Vertex of origin in original graph
-			Vertex * vertexOposite = source->findVertex(edjes.at(j).getDest()->getInfo());
+			Vertex * vertexOposite = source->findVertex(
+					edjes.at(j).getDest()->getInfo());
 
-			for(unsigned int k = 0; k < vertexOposite->adj.size(); k++){
+			for (unsigned int k = 0; k < vertexOposite->adj.size(); k++) {
 
-				if(vertexOposite->adj.at(k).getDest()->getInfo() == vertex->getInfo())
-				{
+				if (vertexOposite->adj.at(k).getDest()->getInfo()
+						== vertex->getInfo()) {
 					vertexOposite->adj.at(k).part_of_path = true;
 					break;
 				}
@@ -175,6 +177,8 @@ void BiDirectionalDijsktra::getPathGraphBi() {
 
 	addingGraph(this, &invertedGraph);
 
+	this->findVertex(spotFinish)->start_of_path = false;
+
 }
 
 void BiDirectionalDijsktra::bidirectionaldijsktrafastest(Spot o, Spot f) {
@@ -269,5 +273,16 @@ void BiDirectionalDijsktra::bidirectionaldijsktrafastest(Spot o, Spot f) {
 			}
 		}
 	}
+
+}
+
+void BiDirectionalDijsktra::bidirectionalAStar(const Spot &s, const Spot &d) {
+
+	for (unsigned int i = 0; i < this->vertexSet.size(); i++) {
+		vertexSet.at(i)->distToSource = distanceCoordinates(
+				vertexSet.at(i)->getInfo(), d);
+	}
+
+	bidirectionaldijsktrafastest(s, d);
 
 }

@@ -14,7 +14,6 @@
 #include "BiDirectionalDijkstra.h"
 
 
-
 #if __linux__
 #define clearScreen() system("clear")
 #else

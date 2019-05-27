@@ -25,7 +25,11 @@ void Vertex::addEdge(Vertex *d, double w,  TYPE_TRANSPORTATION tp) {
 
 
 bool Vertex::operator<(Vertex & vertex) const {
-	return this->dist < vertex.dist;
+
+	if(distToSource < 0)
+		return dist < vertex.dist;
+
+	return distToSource < vertex.distToSource;
 }
 
 

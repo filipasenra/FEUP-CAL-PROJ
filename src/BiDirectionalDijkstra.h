@@ -38,6 +38,7 @@ public:
 	double getTotalWeight(){
 		return TotalWeight;
 	};
+	void bidirectionalAStar(const Spot &s, const Spot &d);
 
 };
 

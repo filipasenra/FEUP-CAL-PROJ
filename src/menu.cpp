@@ -21,6 +21,9 @@ menu::menu() {
 	this->graph = parseMap("T11_nodes_X_Y_Porto.txt", "T11_edges_Porto.txt",
 			"T11_nodes_lat_lon_Porto.txt", "stcp_routes_Porto.txt", "metro_routes_Porto.txt");
 
+	schedule.push_back(Info_calendar(graph.findVertex(Spot(280200623))->getInfo(), 10, 10, 10));
+		schedule.push_back(Info_calendar(graph.findVertex(Spot(343646668))->getInfo(), 12, 10, 10));
+
 }
 
 
@@ -178,9 +181,9 @@ void menu::addElementScedule() {
 
 void menu::showMapSchedule() {
 
-	Graph graphPath;
-
 	double weight = 0;
+
+	graph.resetPath();
 
 	for (size_t i = 1; i < this->schedule.size(); i++) {
 		Graph new_graph;
@@ -190,21 +193,19 @@ void menu::showMapSchedule() {
 			continue;
 		}
 
-		graph.dijkstraShortestPath(schedule.at(i - 1).getSpot(),
+		graph.dijkstraFastestPath(schedule.at(i - 1).getSpot(),
 				schedule.at(i).getSpot());
 
 		weight += graph.findVertex(schedule.at(i).getSpot())->dist;
 
-		new_graph = graph.getPathGraph(schedule.at(i - 1).getSpot(),
+		graph.getPathGraph(schedule.at(i - 1).getSpot(),
 				schedule.at(i).getSpot());
-
-		addingGraph(&graphPath, &new_graph);
 	}
 
-	if (graphPath.getNumVertex() != 0) {
-		drawGraph(graph, 1500, 1000);
+	if (weight < INF) {
+		drawPath(graph, 1500, 1000);
 
-		cout << "The total weight of the trip is: " << weight << "." << endl;
+		cout << "The total weight of the trip is: " << weight * 60 << "." << endl;
 		getchar();
 	} else
 		cout << "No path found!\n";

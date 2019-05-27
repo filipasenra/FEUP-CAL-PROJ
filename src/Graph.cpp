@@ -5,9 +5,9 @@
  *      Author: filip
  */
 
-#define VELOCITY_BUS 30 //(km/h)
-#define VELOCITY_SUBWAY 40//(km/h)
-#define VELOCITY_FOOT 40//(km/h)
+#define VELOCITY_BUS 45 //(km/h)
+#define VELOCITY_SUBWAY 45//(km/h)
+#define VELOCITY_FOOT 5//(km/h)
 
 #include "Graph.h"
 #include "Math.h"
@@ -134,8 +134,10 @@ bool Graph::relaxFastest(Vertex *v, Vertex *w, double weight) {
 
 	if (v->getInfo().hasSameSubWayStation(w->getInfo())) {
 		weight /= VELOCITY_SUBWAY;
+		weight += 1 / 60.0;
 	} else if (v->getInfo().hasSameBusStation(w->getInfo())) {
 		weight /= VELOCITY_BUS;
+		weight += 1 / 60.0;
 	} else {
 		weight /= VELOCITY_FOOT;
 	}
@@ -163,11 +165,24 @@ void Graph::ResetNodes() {
 		vertexSet.at(i)->disjSet.clear();
 		vertexSet.at(i)->dist = INF;
 		vertexSet.at(i)->queueIndex = 0;
-		vertexSet.at(i)->visited = false;
 
 	}
 
 	this->nodesReset = true;
+}
+
+void Graph::resetPath() const {
+
+	for (unsigned int i = 0; i < this->vertexSet.size(); i++) {
+		vertexSet.at(i)->part_of_path = false;
+		vertexSet.at(i)->start_of_path = false;
+
+		for(unsigned int j = 0; j < vertexSet.at(i)->getEdjes().size(); j++){
+			vertexSet.at(i)->getEdjes().at(j).part_of_path = false;
+		}
+
+	}
+
 }
 
 void Graph::dijkstraShortestPath(const Spot &origin, const Spot &end) {
@@ -193,7 +208,6 @@ void Graph::dijkstraShortestPath(const Spot &origin, const Spot &end) {
 
 			if (relax(v, e.dest, e.weight)) {
 
-				cout << e.dest << endl;
 				if (oldDist == INF)
 				q.insert(e.dest);
 				else
@@ -228,11 +242,11 @@ Graph Graph::getPathGraph(const Spot &origin, const Spot &dest) const {
 	return graph;
 
 	Vertex *old = nullptr;
+	v->start_of_path = true;
 
 	for (; v != nullptr; v = v->path) {
 
 		v->part_of_path = true;
-
 		graph.addVertex(v->getInfo());
 
 		//Adding edge to new graph!!
@@ -249,9 +263,6 @@ Graph Graph::getPathGraph(const Spot &origin, const Spot &dest) const {
 						graph.addEdge(old->getInfo(), v->getInfo(),
 								v->adj.at(i).getWeight(),
 								v->adj.at(i).type_transportation);
-						graph.addEdge(v->getInfo(), old->getInfo(),
-								v->adj.at(i).getWeight(),
-								v->adj.at(i).type_transportation);
 						break;
 					}
 				}
@@ -259,6 +270,9 @@ Graph Graph::getPathGraph(const Spot &origin, const Spot &dest) const {
 		}
 
 		old = v;
+
+		if (v->path == nullptr)
+			v->start_of_path = true;
 	}
 
 	return graph;
@@ -377,19 +391,7 @@ void Graph::dijkstraFastestPath(const Spot & origin, const Spot & end) {
 		for (auto e : v->adj) {
 			auto oldDist = e.getDest()->dist;
 
-			double weight = e.getWeight();
-
-			if (v->getInfo().hasSameSubWayStation(e.getDest()->getInfo())) {
-				weight /= VELOCITY_SUBWAY;
-			} else if (v->getInfo().hasSameBusStation(e.getDest()->getInfo())) {
-				weight /= VELOCITY_BUS;
-			} else {
-				weight /= VELOCITY_FOOT;
-			}
-
-			if (v->dist + weight < oldDist) {
-				e.getDest()->dist = v->dist + weight;
-				e.getDest()->path = v;
+			if (relaxFastest(v, e.dest, e.weight)) {
 
 				if (oldDist == INF)
 				q.insert(e.getDest());

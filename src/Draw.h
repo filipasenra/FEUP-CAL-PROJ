@@ -7,6 +7,7 @@
 
 int drawGraph(Graph graph, int width, int height);
 
+int drawPath(Graph graph, int width, int height);
 
 
 #endif

@@ -61,6 +61,7 @@ public:
 
 	void dijkstraShortestPath(const Spot &s, const Spot &d);
 	vector<Spot> getPath(const Spot &origin, const Spot &dest) const;
+	void resetPath() const;
 	void dijkstraFastestPath(const Spot & origin, const Spot & end);
 
 	~Graph();

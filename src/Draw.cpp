@@ -61,7 +61,7 @@ int drawGraph(Graph graph, int width, int height) {
 	double graphHeight = y1 - y;
 	double graphWidth = x1 - x;
 
-	width = max((int)(height * graphWidth/graphHeight), width);
+	width = max((int) (height * graphWidth / graphHeight), width);
 
 	vector<Vertex *> vec = graph.getVertexSet();
 	int n_edge = 0;
@@ -71,24 +71,16 @@ int drawGraph(Graph graph, int width, int height) {
 
 		double yPercent = 1.0
 				- ((info.getCoordinates_y() - y) / graphHeight * 0.9 + 0.05); //+5% to have margins
-		double xPercent = (info.getCoordinates_x() - x) / graphWidth * 0.9 + 0.05; //*90% to be within margins
+		double xPercent = (info.getCoordinates_x() - x) / graphWidth * 0.9
+				+ 0.05; //*90% to be within margins
 
 		gv->addNode(info.getId(), (int) (xPercent * width),
 				(int) (yPercent * height));
-
-
-		if(vec.at(i)->part_of_path)
-		{
-			gv->setVertexSize(info.getId(), 40);
-			gv->setVertexColor(info.getId(), RED);
-			continue;
-		}
 
 		if (info.hasSubwayStop()) {
 			gv->setVertexIcon(info.getId(), "images/subway.jpg");
 		} else if (info.hasBusStop())
 			gv->setVertexIcon(info.getId(), "images/stcp.png");
-
 
 		gv->setVertexSize(info.getId(), 8);
 
@@ -112,11 +104,84 @@ int drawGraph(Graph graph, int width, int height) {
 						outgoingEdges[j].getDest()->getInfo().getId(),
 						EdgeType::UNDIRECTED);
 
-				if(outgoingEdges.at(j).part_of_path)
-				{
-					gv->setEdgeColor(n_edge, GREEN);
-					gv->setEdgeThickness(n_edge, 10);
-				}
+				n_edge++;
+			}
+		}
+	}
+
+	return 0;
+
+}
+
+int drawPath(Graph graph, int width, int height) {
+
+	//Displaying of the graph
+
+	//Cria o grafo para visualização
+	GraphViewer *gv = new GraphViewer(width, height, false);
+
+	gv->createWindow(width, height);
+
+	double x, y;
+	getMinimum(graph, x, y);
+
+	double x1, y1;
+	getMaximum(graph, x1, y1);
+
+	double graphHeight = y1 - y;
+	double graphWidth = x1 - x;
+
+	width = max((int) (height * graphWidth / graphHeight), width);
+
+	vector<Vertex *> vec = graph.getVertexSet();
+	int n_edge = 0;
+
+	for (unsigned int i = 0; i < vec.size(); i++) {
+		Spot info = vec[i]->getInfo();
+
+		double yPercent = 1.0
+				- ((info.getCoordinates_y() - y) / graphHeight * 0.9 + 0.05); //+5% to have margins
+		double xPercent = (info.getCoordinates_x() - x) / graphWidth * 0.9
+				+ 0.05; //*90% to be within margins
+
+		gv->addNode(info.getId(), (int) (xPercent * width),
+				(int) (yPercent * height));
+
+		if (vec.at(i)->start_of_path) {
+			gv->setVertexSize(info.getId(), 40);
+			gv->setVertexColor(info.getId(), GREEN);
+			continue;
+		} else if (vec.at(i)->part_of_path) {
+			gv->setVertexSize(info.getId(), 40);
+			gv->setVertexColor(info.getId(), RED);
+			continue;
+		}
+
+		gv->setVertexSize(info.getId(), 8);
+
+	}
+
+	for (unsigned int i = 0; i < vec.size(); i++) {
+		Spot info = vec[i]->getInfo();
+
+		vector<Edge> outgoingEdges = vec[i]->getEdjes();
+
+		for (unsigned int j = 0; j < outgoingEdges.size(); j++) {
+
+			if (outgoingEdges.at(j).part_of_path) {
+				gv->addEdge(n_edge,
+						outgoingEdges[j].getOrig()->getInfo().getId(),
+
+						outgoingEdges[j].getDest()->getInfo().getId(),
+						EdgeType::DIRECTED);
+
+				gv->setEdgeColor(n_edge, GREEN);
+				gv->setEdgeThickness(n_edge, 10);
+
+				if(outgoingEdges.at(j).getType_transportation() == SUBWAY)
+					gv->setEdgeDashed(n_edge, 10);
+				else if(outgoingEdges.at(j).getType_transportation() == BUS)
+					gv->setEdgeThickness(n_edge, 8);
 
 				n_edge++;
 			}

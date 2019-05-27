@@ -23,6 +23,7 @@ class Vertex {
 
 public:
 	bool part_of_path = false;
+	bool start_of_path = false;
 
 	Vertex *path = nullptr;
 	std::vector<Edge > adj;  // outgoing edges

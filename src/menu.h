@@ -13,14 +13,6 @@
 #include "Info_calender.h"
 #include "BiDirectionalDijkstra.h"
 
-
-#if __linux__
-#define clearScreen() system("clear")
-#else
-#define clearScreen() system("cls")
-#endif
-
-
 class menu {
 private:
 	Graph graph;

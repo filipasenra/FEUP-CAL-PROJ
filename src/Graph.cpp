@@ -172,7 +172,7 @@ void Graph::ResetNodes() {
 	this->nodesReset = true;
 }
 
-void Graph::resetPath() const { //elemina o caminho marcado no mapa
+void Graph::resetPath() const {
 
 	for (unsigned int i = 0; i < this->vertexSet.size(); i++) {
 		vertexSet.at(i)->part_of_path = false;
@@ -223,7 +223,7 @@ void Graph::dijkstraShortestPath(const Spot &origin, const Spot &end) {
 	this->nodesReset = false;
 }
 
-vector<Spot> Graph::getPath(const Spot &origin, const Spot &dest) const {  //retorna um vetor de spots com o caminho
+vector<Spot> Graph::getPath(const Spot &origin, const Spot &dest) const {
 	vector<Spot> res;
 	auto v = findVertex(dest);
 	if (v == nullptr || v->dist == INF) // missing or disconnected
@@ -305,7 +305,7 @@ void Graph::dfs(Spot & origin) {
 
 void Graph::bfs(Spot & origin) {
 
-	for (int i = 0; i < this->vertexSet.size(); i++) {
+	for (unsigned int i = 0; i < this->vertexSet.size(); i++) {
 
 		vertexSet.at(i)->visited = false;
 	}
@@ -334,7 +334,7 @@ void Graph::bfs(Spot & origin) {
 
 bool Graph::isPathPossible(const Spot & origin, const Spot & end) {
 
-	for (int i = 0; i < this->vertexSet.size(); i++) {
+	for (unsigned int i = 0; i < this->vertexSet.size(); i++) {
 
 		vertexSet.at(i)->visited = false;
 	}

@@ -1,10 +1,3 @@
-/**
- *
- * class used to store all the activitys the user wants to go
- *
- *
- */
-
 #ifndef _CALENDER_
 #define _CALENDER_
 

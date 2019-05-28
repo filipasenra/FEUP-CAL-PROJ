@@ -1,12 +1,5 @@
-/**
- *
- *	class que guarda a informação de uma atividade
- *
- */
 #ifndef _INFO_CALENDER_
 #define _INFO_CALENDER_
-
-
 
 #include "Spot.h"
 

@@ -1,7 +1,3 @@
-/*
- * class utilizada para dar load dos mapas
- */
-
 #include "mapParser.h"
 
 #include <fstream>
@@ -128,7 +124,6 @@ void parseEdgesFile(Graph * graph, std::string edgesFile,
 void makeLinesBus(Graph * graph, set<string> bus) {
 
 	vector<Vertex *> vec = graph->getVertexSet();
-	set<string>::iterator it = bus.begin();
 
 	for (set<string>::const_iterator it = bus.begin(); it != bus.end(); it++) {
 
@@ -218,7 +213,6 @@ void parseBusFile(Graph * graph, std::string busFile) {
 void makeLinesSubway(Graph * graph, set<string> subwayLines) {
 
 	vector<Vertex *> vec = graph->getVertexSet();
-	set<string>::iterator it = subwayLines.begin();
 
 	for (set<string>::const_iterator it = subwayLines.begin(); it != subwayLines.end(); it++) {
 

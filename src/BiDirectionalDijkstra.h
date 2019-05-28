@@ -2,7 +2,7 @@
  * BiDirectionalDijkstra.h
  *
  *  Created on: 21/05/2019
- *      Author: filipa
+ *      Author: filip
  */
 
 #ifndef SRC_BIDIRECTIONALDIJKSTRA_H_

@@ -1,10 +1,6 @@
 /*
  * menu.cpp
  *
- *
- * menu contem a interface
- *
- *
  *  Created on: 20/05/2019
  *      Author: david
  */
@@ -24,21 +20,10 @@ menu::menu() {
 
 	this->graph = parseMap("T11_nodes_X_Y_Porto.txt", "T11_edges_Porto.txt",
 			"T11_nodes_lat_lon_Porto.txt", "stcp_routes_Porto.txt",
-			"metro_routes_Porto.txt");        //adiciona os vertexs, edges, autocarros e metro
-
-	schedule.push_back(
-			Info_calendar(graph.findVertex(Spot(280200623))->getInfo(), 10, 10,
-					10));
-	schedule.push_back(
-			Info_calendar(graph.findVertex(Spot(90379359))->getInfo(), 11, 10,
-					10));
-	schedule.push_back(
-			Info_calendar(graph.findVertex(Spot(343646668))->getInfo(), 12, 10,
-					10));
+			"metro_routes_Porto.txt");
 }
 
 void menu::initial() {
-	clearScreen();
 
 	cout << endl;  //adicionar opcoes aqui
 	cout
@@ -116,7 +101,8 @@ void menu::addElementScedule() {
 				<< schedule.at(i).getDuration() << " minutes" << endl;
 	}
 	double coordinates_x, coordinates_y;
-	cout << "Longitude: ";		//check if input is valid
+
+	cout << "Longitude: ";
 	while (!(cin >> coordinates_x)) {
 		cin.clear();
 		cin.ignore(10000, '\n');
@@ -136,7 +122,7 @@ void menu::addElementScedule() {
 	Spot spot;
 	bool passed;
 
-	for (size_t i = 0; i < vec.size(); i++) {    //check if coordenadesare a valid spot
+	for (size_t i = 0; i < vec.size(); i++) {
 		Coordinates latlong = vec.at(i)->getInfo().getLatiLong();
 
 		if ((latlong.getCoordinates_x()) == coordinates_x
@@ -183,7 +169,7 @@ void menu::addElementScedule() {
 
 	Info_calendar info_calendar(spot, hour, minutes, duration);
 
-	for (size_t i = 0; i < schedule.size(); i++) {    //checks if hour:minute are valid
+	for (size_t i = 0; i < schedule.size(); i++) {
 		if (schedule.at(i).sameTime(info_calendar)) {
 			cout
 					<< "Can't add activity because there are other at the same time! \n";
@@ -193,7 +179,7 @@ void menu::addElementScedule() {
 
 	this->schedule.push_back(info_calendar);
 
-	sort(schedule.begin(), schedule.end()); //sorts by the start hour
+	sort(schedule.begin(), schedule.end());
 }
 
 void menu::removeElementSchedule() {
@@ -234,7 +220,7 @@ void menu::showMapScheduleFastest() {
 	for (size_t i = 1; i < this->schedule.size(); i++) {
 
 		if (!graph.isPathPossible(schedule.at(i - 1).getSpot(),
-				schedule.at(i).getSpot())) {         //checks if path its possible
+				schedule.at(i).getSpot())) {
 			cout << "Path is not possible between "
 					<< schedule.at(i - 1).getSpot().getId() << " and "
 					<< schedule.at(i).getSpot().getId() << "!\n";

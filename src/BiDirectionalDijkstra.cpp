@@ -1,3 +1,10 @@
+
+/*
+ * BiDirectionalDijkstra.cpp
+ *
+ *	contain all the algorithm used in the project
+ */
+
 #include "BiDirectionalDijkstra.h"
 
 #include "Draw.h"

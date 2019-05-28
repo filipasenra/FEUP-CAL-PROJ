@@ -1,3 +1,7 @@
+/*
+ * class utilizada para dar load dos mapas
+ */
+
 #include "mapParser.h"
 
 #include <fstream>

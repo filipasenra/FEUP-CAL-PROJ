@@ -1,8 +1,9 @@
 /*
  * Edge.cpp
  *
- *  Created on: 24/05/2019
- *      Author: filip
+ *	class represents the connection between the nodes
+ *
+ *
  */
 
 #include "Edge.h"

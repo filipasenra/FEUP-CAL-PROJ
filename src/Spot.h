@@ -1,3 +1,7 @@
+/**
+ * class utilizada para guardar as informaçoes de todos os pontos de um mapa, id, coordenadas
+ */
+
 #ifndef _SPOT_
 #define _SPOT_
 

@@ -1,3 +1,7 @@
+/*
+ * class usada para guardar as informações de uma estação: bus ou subway
+ */
+
 #ifndef _TYPE_
 #define _TYPE_
 

@@ -183,6 +183,7 @@ void parseBusFile(Graph * graph, std::string busFile) {
 	iss >> number_of_nodes;
 
 	set<string> bus_lines;
+	char random[50];
 
 	while (std::getline(file_bus, line) && number_of_nodes != 0) {
 		number_of_nodes--;
@@ -193,7 +194,7 @@ void parseBusFile(Graph * graph, std::string busFile) {
 		//%s eats the comma %[^,\n] does not
 		sscanf(line.c_str(),
 				"(%d, %[^,\n], %[^,\n], %[^,\n], %[^,\n], %[^,\n], %[^,\n], %[^)\n])",
-				&id, codStop, codLine, NULL, NULL, NULL, NULL, NULL);
+				&id, codStop, codLine, random, random, random, random, random);
 
 		Vertex * vertex = graph->findVertex(Spot(id));
 

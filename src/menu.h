@@ -31,6 +31,7 @@ public:
 	menu();
 	void initial();
 	void addElementScedule();
+	void removeElementSchedule();
 	void makePath();
 	void showMapSchedule();
 

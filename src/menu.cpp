@@ -22,26 +22,9 @@ menu::menu() {
 			"T11_nodes_lat_lon_Porto.txt", "stcp_routes_Porto.txt", "metro_routes_Porto.txt");
 
 	schedule.push_back(Info_calendar(graph.findVertex(Spot(280200623))->getInfo(), 10, 10, 10));
-		schedule.push_back(Info_calendar(graph.findVertex(Spot(343646668))->getInfo(), 12, 10, 10));
-
+	schedule.push_back(Info_calendar(graph.findVertex(Spot(343646668))->getInfo(), 12, 10, 10));
 }
 
-
-
-int getPathWeight(){
-
-}
-
-void nearestneighbour(Spot origin, Spot dest, Graph graph){
-	vector<Spot> bus;
-	for (size_t i = 0; i < graph.getVertexSet().size(); i++){
-		if (graph.getVertexSet().at(i)->getInfo().hasBusStop()){
-			bus.push_back(graph.getVertexSet().at(i)->getInfo());
-		}
-
-	}
-	return;
-}
 
 
 
@@ -66,10 +49,13 @@ void menu::initial() {
 			<< "|      2 - Add element to schedule                                      |"
 			<< endl;
 	cout
-			<< "|      3 - Show schedule map                                            |"
+			<< "|      3 - Add element to schedule                                      |"
 			<< endl;
 	cout
-			<< "|      4 - Exit                                                         |"
+			<< "|      4 - Show schedule map                                            |"
+			<< endl;
+	cout
+			<< "|      5 - Exit                                                         |"
 			<< endl;
 	cout
 			<< "|                                                                       |"
@@ -91,12 +77,16 @@ void menu::initial() {
 		this->addElementScedule();
 		break;
 	case 3:
-		this->showMapSchedule();
+		this->removeElementSchedule();
 		break;
 	case 4:
+		this->showMapSchedule();
+		break;
+	case 5:
 		this->terminate = true;
-		return;
+		break;
 	}
+	return;
 
 }
 
@@ -105,6 +95,12 @@ void menu::addElementScedule() {
 	cin.clear();
 	cin.ignore(10000, '\n');
 
+	for (size_t i = 0; i < schedule.size(); i++) {
+		cout << i + 1 << "- " << schedule.at(i).getSpot().getId() <<
+				" at time:" << schedule.at(i).getStart()/60 << ":" <<
+				schedule.at(i).getStart()%60 << " with duration:" <<
+				schedule.at(i).getDuration() << " minutes" << endl;
+	}
 	double coordinates_x, coordinates_y;
 
 	cout << "Longitude: ";
@@ -174,30 +170,58 @@ void menu::addElementScedule() {
 
 	Info_calendar info_calendar(spot, hour, minutes, duration);
 
+	for (size_t i = 0; i < schedule.size(); i++) {
+		if (schedule.at(i).sameTime(info_calendar)){
+			cout << "Can't add activity because there are other at the same time! \n";
+			return;
+		}
+	}
+
 	this->schedule.push_back(info_calendar);
 
 	sort(schedule.begin(), schedule.end());
 }
 
+
+void menu::removeElementSchedule(){
+
+	cin.clear();
+	cin.ignore(10000, '\n');
+
+	for (size_t i = 0; i < schedule.size(); i++) {
+		cout << i + 1 << "- " << schedule.at(i).getSpot().getId() <<
+				" at time:" << schedule.at(i).getStart()/60 << ":" <<
+				schedule.at(i).getStart()%60 << " with duration:" <<
+				schedule.at(i).getDuration() << " minutes" << endl;
+	}
+
+	cout << "which one do you want to remove? (number, 0 to cancel)" << endl;
+	int option;
+	cin >> option;
+	if (option == 0){
+		return;
+	}
+	else{
+		schedule.erase(schedule.begin() + option-1);
+	}
+
+}
+
 void menu::showMapSchedule() {
 
 	double weight = 0;
-
 	graph.resetPath();
 	Graph graph2;
-
 	for (size_t i = 1; i < this->schedule.size(); i++) {
 
 		if (!graph.isPathPossible(schedule.at(i - 1).getSpot(), schedule.at(i).getSpot())) {
 			cout << "Path is not possible between " << schedule.at(i - 1).getSpot().getId() << " and " << schedule.at(i).getSpot().getId() << "!\n";
 			continue;
 		}
-
 		BiDirectionalDijsktra bid(graph);
 
 		bid.bidirectionalAStar(schedule.at(i - 1).getSpot(),
 				schedule.at(i).getSpot());
-
 		weight += bid.getTotalWeight();
 
 		bid.getPathGraphBi();
@@ -213,7 +237,6 @@ void menu::showMapSchedule() {
 
 	if (weight < INF) {
 		drawPath(graph, 1500, 1000);
-
 		cout << "The total weight of the trip is: " << weight * 60 << "." << endl;
 		getchar();
 	} else

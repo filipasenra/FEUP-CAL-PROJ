@@ -29,7 +29,7 @@ bool Vertex::operator<(Vertex & vertex) const {
 	if(distToSource < 0)
 		return dist < vertex.dist;
 
-	return distToSource < vertex.distToSource;
+	return distToSource/45.0 + dist < vertex.distToSource/45.0 + vertex.dist;
 }
 
 

@@ -19,16 +19,19 @@ menu::menu() {
 	cout << "Loading Map..." << endl;
 
 	this->graph = parseMap("T11_nodes_X_Y_Porto.txt", "T11_edges_Porto.txt",
-			"T11_nodes_lat_lon_Porto.txt", "stcp_routes_Porto.txt", "metro_routes_Porto.txt");
+			"T11_nodes_lat_lon_Porto.txt", "stcp_routes_Porto.txt",
+			"metro_routes_Porto.txt");
 
-	schedule.push_back(Info_calendar(graph.findVertex(Spot(280200623))->getInfo(), 10, 10, 10));
-	schedule.push_back(Info_calendar(graph.findVertex(Spot(90379359))->getInfo(), 11, 10, 10));
-	schedule.push_back(Info_calendar(graph.findVertex(Spot(343646668))->getInfo(), 12, 10, 10));
+	schedule.push_back(
+			Info_calendar(graph.findVertex(Spot(280200623))->getInfo(), 10, 10,
+					10));
+	schedule.push_back(
+			Info_calendar(graph.findVertex(Spot(90379359))->getInfo(), 11, 10,
+					10));
+	schedule.push_back(
+			Info_calendar(graph.findVertex(Spot(343646668))->getInfo(), 12, 10,
+					10));
 }
-
-
-
-
 
 void menu::initial() {
 	clearScreen();
@@ -53,10 +56,13 @@ void menu::initial() {
 			<< "|      3 - Remove element in schedule                                   |"
 			<< endl;
 	cout
-			<< "|      4 - Show schedule map                                            |"
+			<< "|      4 - Show schedule map (fastest path)                             |"
 			<< endl;
 	cout
-			<< "|      5 - Exit                                                         |"
+			<< "|      5 - Show schedule map (shortest path)                            |"
+			<< endl;
+	cout
+			<< "|      6 - Exit                                                         |"
 			<< endl;
 	cout
 			<< "|                                                                       |"
@@ -81,9 +87,12 @@ void menu::initial() {
 		this->removeElementSchedule();
 		break;
 	case 4:
-		this->showMapSchedule();
+		this->showMapScheduleFastest();
 		break;
 	case 5:
+		this->showMapScheduleShortest();
+		break;
+	case 6:
 		this->terminate = true;
 		break;
 	}
@@ -97,10 +106,10 @@ void menu::addElementScedule() {
 	cin.ignore(10000, '\n');
 
 	for (size_t i = 0; i < schedule.size(); i++) {
-		cout << i + 1 << "- " << schedule.at(i).getSpot().getId() <<
-				" at time:" << schedule.at(i).getStart()/60 << ":" <<
-				schedule.at(i).getStart()%60 << " with duration:" <<
-				schedule.at(i).getDuration() << " minutes" << endl;
+		cout << i + 1 << "- " << schedule.at(i).getSpot().getId() << " at time:"
+				<< schedule.at(i).getStart() / 60 << ":"
+				<< schedule.at(i).getStart() % 60 << " with duration:"
+				<< schedule.at(i).getDuration() << " minutes" << endl;
 	}
 	double coordinates_x, coordinates_y;
 
@@ -172,8 +181,9 @@ void menu::addElementScedule() {
 	Info_calendar info_calendar(spot, hour, minutes, duration);
 
 	for (size_t i = 0; i < schedule.size(); i++) {
-		if (schedule.at(i).sameTime(info_calendar)){
-			cout << "Can't add activity because there are other at the same time! \n";
+		if (schedule.at(i).sameTime(info_calendar)) {
+			cout
+					<< "Can't add activity because there are other at the same time! \n";
 			return;
 		}
 	}
@@ -183,59 +193,90 @@ void menu::addElementScedule() {
 	sort(schedule.begin(), schedule.end());
 }
 
-
-void menu::removeElementSchedule(){
+void menu::removeElementSchedule() {
 
 	cin.clear();
 	cin.ignore(10000, '\n');
 
 	for (size_t i = 0; i < schedule.size(); i++) {
-		cout << i + 1 << "- " << schedule.at(i).getSpot().getId() <<
-				" at time:" << schedule.at(i).getStart()/60 << ":" <<
-				schedule.at(i).getStart()%60 << " with duration:" <<
-				schedule.at(i).getDuration() << " minutes" << endl;
+		cout << i + 1 << "- " << schedule.at(i).getSpot().getId() << " at time:"
+				<< schedule.at(i).getStart() / 60 << ":"
+				<< schedule.at(i).getStart() % 60 << " with duration:"
+				<< schedule.at(i).getDuration() << " minutes" << endl;
 	}
 
-	cout << "which one do you want to remove? (number, 0 to cancel)" << endl;
+	cout
+			<< "which one do you want to remove? (number, 0 to cancel, -1 to clear schedule)"
+			<< endl;
+
 	int option;
 	cin >> option;
-	if (option == 0){
+
+	if (option == 0) {
 		return;
 	}
-	else{
-		schedule.erase(schedule.begin() + option-1);
+	if (option == -1) {
+		schedule.clear();
+	} else {
+		schedule.erase(schedule.begin() + option - 1);
 	}
 
 }
 
-void menu::showMapSchedule() {
+void menu::showMapScheduleFastest() {
 
 	double weight = 0;
 	graph.resetPath();
 	Graph graph2;
 	for (size_t i = 1; i < this->schedule.size(); i++) {
 
-		if (!graph.isPathPossible(schedule.at(i - 1).getSpot(), schedule.at(i).getSpot())) {
-			cout << "Path is not possible between " << schedule.at(i - 1).getSpot().getId() << " and " << schedule.at(i).getSpot().getId() << "!\n";
+		if (!graph.isPathPossible(schedule.at(i - 1).getSpot(),
+				schedule.at(i).getSpot())) {
+			cout << "Path is not possible between "
+					<< schedule.at(i - 1).getSpot().getId() << " and "
+					<< schedule.at(i).getSpot().getId() << "!\n";
 			continue;
 		}
 
 		BiDirectionalDijsktra bid(graph);
 
-		bid.bidirectionaldijsktrafastest(schedule.at(i - 1).getSpot(),
+		bid.bidirectionaldijsktra(schedule.at(i - 1).getSpot(),
 				schedule.at(i).getSpot());
 
 		weight += bid.getTotalWeight();
 
 		bid.getPathGraphBi();
+	}
 
-		/*graph.dijkstraFastestPath(schedule.at(i - 1).getSpot(),
-				schedule.at(i).getSpot());
+	if (weight < INF) {
+		drawPath(graph, 1500, 1000);
+		cout << "The total weight of the trip is: " << weight * 60 << "." << endl;
+		getchar();
+	} else
+	cout << "No path found!\n";
+}
+
+void menu::showMapScheduleShortest() {
+
+	double weight = 0;
+	graph.resetPath();
+	Graph graph2;
+	for (size_t i = 1; i < this->schedule.size(); i++) {
+
+		if (!graph.isPathPossible(schedule.at(i - 1).getSpot(),
+				schedule.at(i).getSpot())) {
+			cout << "Path is not possible between "
+					<< schedule.at(i - 1).getSpot().getId() << " and "
+					<< schedule.at(i).getSpot().getId() << "!\n";
+			continue;
+		}
+
+		graph.AStar(schedule.at(i - 1).getSpot(), schedule.at(i).getSpot());
 
 		weight += graph.findVertex(schedule.at(i).getSpot())->dist;
 
 		graph.getPathGraph(schedule.at(i - 1).getSpot(),
-				schedule.at(i).getSpot());*/
+				schedule.at(i).getSpot());
 	}
 
 	if (weight < INF) {

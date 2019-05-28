@@ -133,7 +133,10 @@ void BiDirectionalDijsktra::bidirectionaldijsktra(Spot o, Spot f) {
 				if (oldDist == INF)
 				q.insert(e.getDest());
 				else
-				q.decreaseKey(e.getDest());
+				{
+					if(e.dest->queueIndex != 0)
+					q.decreaseKey(e.getDest());
+				}
 			}
 		}
 
@@ -269,7 +272,10 @@ void BiDirectionalDijsktra::bidirectionaldijsktrafastest(Spot o, Spot f) {
 				if (oldDist == INF)
 				q2.insert(e.getDest());
 				else
-				q2.decreaseKey(e.getDest());
+				{
+					if(e.dest->queueIndex != 0)
+					q2.decreaseKey(e.getDest());
+				}
 			}
 		}
 	}

@@ -43,6 +43,7 @@ public:
 	std::vector<Edge> getEdjes() const;
 	friend class Graph ;
 	friend class MutablePriorityQueue<Vertex> ;
+	friend class BiDirectionalDijsktra;
 };
 
 #endif /* SRC_VERTEX_H_ */

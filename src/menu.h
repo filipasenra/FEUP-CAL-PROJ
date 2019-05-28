@@ -33,7 +33,8 @@ public:
 	void addElementScedule();
 	void removeElementSchedule();
 	void makePath();
-	void showMapSchedule();
+	void showMapScheduleFastest();
+	void showMapScheduleShortest();
 
 };
 

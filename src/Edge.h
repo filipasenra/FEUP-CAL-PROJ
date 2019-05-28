@@ -47,6 +47,8 @@ public:
 		return this->type_transportation;
 	}
 
+	friend class BiDirectionalDijsktra;
+
 };
 
 

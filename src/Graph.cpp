@@ -147,10 +147,9 @@ bool Graph::relaxFastest(Vertex *v, Vertex *w, double weight) {
 		w->path = v;
 
 		return true;
-	} else
-		{
+	} else {
 		return false;
-		}
+	}
 }
 
 /**
@@ -213,7 +212,9 @@ void Graph::dijkstraShortestPath(const Spot &origin, const Spot &end) {
 				if (oldDist == INF)
 				q.insert(e.dest);
 				else
-				q.decreaseKey(e.dest);
+				{	if(e.dest->queueIndex != 0)
+					q.decreaseKey(e.dest);
+				}
 			}
 		}
 
@@ -384,7 +385,7 @@ void Graph::dijkstraFastestPath(const Spot & origin, const Spot & end) {
 
 		for (auto e : v->adj) {
 
-			auto oldDist = e.getDest()->dist;
+			auto oldDist = e.dest->dist;
 
 			if (relaxFastest(v, e.dest, e.weight)) {
 
@@ -394,7 +395,9 @@ void Graph::dijkstraFastestPath(const Spot & origin, const Spot & end) {
 				}
 				else
 				{
-					//q.decreaseKey(e.dest);
+					if(e.dest->queueIndex != 0)
+					q.decreaseKey(e.dest);
+
 				}
 			}
 		}

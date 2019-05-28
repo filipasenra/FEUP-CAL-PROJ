@@ -182,7 +182,7 @@ int drawPath(Graph graph, int width, int height) {
 				if(outgoingEdges.at(j).getType_transportation() == SUBWAY)
 					gv->setEdgeDashed(n_edge, 10);
 				else if(outgoingEdges.at(j).getType_transportation() == BUS)
-					gv->setEdgeThickness(n_edge, 8);
+					gv->setEdgeColor(n_edge, BLUE);
 
 				n_edge++;
 			}

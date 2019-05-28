@@ -22,6 +22,7 @@ menu::menu() {
 			"T11_nodes_lat_lon_Porto.txt", "stcp_routes_Porto.txt", "metro_routes_Porto.txt");
 
 	schedule.push_back(Info_calendar(graph.findVertex(Spot(280200623))->getInfo(), 10, 10, 10));
+	schedule.push_back(Info_calendar(graph.findVertex(Spot(90379359))->getInfo(), 11, 10, 10));
 	schedule.push_back(Info_calendar(graph.findVertex(Spot(343646668))->getInfo(), 12, 10, 10));
 }
 
@@ -49,7 +50,7 @@ void menu::initial() {
 			<< "|      2 - Add element to schedule                                      |"
 			<< endl;
 	cout
-			<< "|      3 - Add element to schedule                                      |"
+			<< "|      3 - Remove element in schedule                                   |"
 			<< endl;
 	cout
 			<< "|      4 - Show schedule map                                            |"
@@ -218,15 +219,17 @@ void menu::showMapSchedule() {
 			cout << "Path is not possible between " << schedule.at(i - 1).getSpot().getId() << " and " << schedule.at(i).getSpot().getId() << "!\n";
 			continue;
 		}
+
 		BiDirectionalDijsktra bid(graph);
 
-		bid.bidirectionalAStar(schedule.at(i - 1).getSpot(),
+		bid.bidirectionaldijsktrafastest(schedule.at(i - 1).getSpot(),
 				schedule.at(i).getSpot());
+
 		weight += bid.getTotalWeight();
 
 		bid.getPathGraphBi();
 
-		/*graph.AStar(schedule.at(i - 1).getSpot(),
+		/*graph.dijkstraFastestPath(schedule.at(i - 1).getSpot(),
 				schedule.at(i).getSpot());
 
 		weight += graph.findVertex(schedule.at(i).getSpot())->dist;

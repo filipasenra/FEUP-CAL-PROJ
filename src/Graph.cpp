@@ -145,9 +145,12 @@ bool Graph::relaxFastest(Vertex *v, Vertex *w, double weight) {
 	if (v->dist + weight < w->dist) {
 		w->dist = v->dist + weight;
 		w->path = v;
+
 		return true;
 	} else
+		{
 		return false;
+		}
 }
 
 /**
@@ -176,8 +179,8 @@ void Graph::resetPath() const {
 		vertexSet.at(i)->part_of_path = false;
 		vertexSet.at(i)->start_of_path = false;
 
-		for (unsigned int j = 0; j < vertexSet.at(i)->getEdjes().size(); j++) {
-			vertexSet.at(i)->getEdjes().at(j).part_of_path = false;
+		for (unsigned int j = 0; j < vertexSet.at(i)->adj.size(); j++) {
+			vertexSet.at(i)->adj.at(j).part_of_path = false;
 		}
 
 	}
@@ -375,7 +378,7 @@ void Graph::dijkstraFastestPath(const Spot & origin, const Spot & end) {
 
 		auto v = q.extractMin();
 
-//Has it arrived at the end of the path?
+		//Has it arrived at the end of the path?
 		if (v->getInfo() == end)
 			return;
 
@@ -386,9 +389,13 @@ void Graph::dijkstraFastestPath(const Spot & origin, const Spot & end) {
 			if (relaxFastest(v, e.dest, e.weight)) {
 
 				if (oldDist == INF)
-				q.insert(e.getDest());
+				{
+					q.insert(e.dest);
+				}
 				else
-				q.decreaseKey(e.getDest());
+				{
+					//q.decreaseKey(e.dest);
+				}
 			}
 		}
 
@@ -401,7 +408,8 @@ void Graph::dijkstraFastestPath(const Spot & origin, const Spot & end) {
 void Graph::AStar(const Spot &s, const Spot &d) {
 
 	for (unsigned int i = 0; i < this->vertexSet.size(); i++) {
-		vertexSet.at(i)->distToSource = distanceCoordinates(vertexSet.at(i)->getInfo(), d);
+		vertexSet.at(i)->distToSource = distanceCoordinates(
+				vertexSet.at(i)->getInfo(), d);
 	}
 
 	dijkstraFastestPath(s, d);

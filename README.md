@@ -1,5 +1,8 @@
 # FEUP-CAL-PROJ
-   Este projeto foi realizado no âmbito da unidade curricular de concepção e análise de algoritmos.
+   Este projeto foi realizado no âmbito da unidade curricular de concepção e análise de algoritmos.  
+   
+**Nota da Primeira Entrega: 18.25.**  
+**Nota da Segunda Entrega: 18.**
 
 ### Tema
 

@@ -1,8 +1,13 @@
 # FEUP-CAL-PROJ
-   Este projeto foi realizado no âmbito da unidade curricular de concepção e análise de algoritmos.  
+  This project was developed for the CAL curricular unit.
    
 **Nota da Primeira Entrega: 18.25.**  
 **Nota da Segunda Entrega: 18.**
+
+## Project Infos
+* Date: 2nd Year, 2st Semester, 2018/2019
+* Course: Concepção e Análise de Algoritmos (CAL) | Conception and Analysis of Algorithms
+* Course Link: https://sigarra.up.pt/feup/pt/ucurr_geral.ficha_uc_view?pv_ocorrencia_id=419999
 
 ### Tema
 
@@ -23,4 +28,10 @@ Ana Filipa Campos Senra
 David Freitas Dinis
 * Student Number: 201706766
 * E-Mail: up201706766@fe.up.pt
+
+
+## Disclaimer
+This repository corresponds to school projects from the respective COURSE. The code on this repo is intended for educational purposes. I do not take any responsibility, liability or whateverity over any code faults, inconsistency or anything else. If you intend on copying most or parts of the code for your school projects, keep in mind that this repo is public, and that your professor might search the web for similar project solutions or whatnot and choose to fail you for copying.
+
+(Credits to Rui Alves (xRuiAlves , https://github.com/xRuiAlves/) for the README layout) -->Take a look at his GitHub (it helped me a lot!)
 
